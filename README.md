@@ -25,6 +25,17 @@ images](https://flutter.dev/docs/development/ui/assets-and-images#resolution-awa
 This project generates localized messages based on arb files found in
 the `lib/src/localization` directory.
 
+## Firebase Information
+
+Project Name: 
+bestellbuch 
+
+Project ID:
+bestellbuch-59c64
+
+Project Number:
+156336675241
+
 To support additional languages, please visit the tutorial on
 [Internationalizing Flutter
 apps](https://flutter.dev/docs/development/accessibility-and-localization/internationalization)
