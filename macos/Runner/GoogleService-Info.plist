@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>156336675241-vq115q3u2mo2rus222v22r1sgqor0bkv.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.156336675241-vq115q3u2mo2rus222v22r1sgqor0bkv</string>
+	<key>API_KEY</key>
+	<string>AIzaSyB_3shFjnp_o__eRFxt62bYEAK8lidc9Sc</string>
+	<key>GCM_SENDER_ID</key>
+	<string>156336675241</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.shahaab.bestellbuch</string>
+	<key>PROJECT_ID</key>
+	<string>bestellbuch-59c64</string>
+	<key>STORAGE_BUCKET</key>
+	<string>bestellbuch-59c64.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:156336675241:ios:81e1a69c1ba51afd720cb8</string>
+</dict>
+</plist>

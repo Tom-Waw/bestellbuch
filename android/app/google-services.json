@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "156336675241",
+    "project_id": "bestellbuch-59c64",
+    "storage_bucket": "bestellbuch-59c64.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:156336675241:android:e5b7065d43d145ee720cb8",
+        "android_client_info": {
+          "package_name": "com.shahaab.bestellbuch"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "156336675241-o73pu09pb576jifcuvb5imjtcjmrpggp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7NyCJs_FrsZpGTvuO9EH1SnhjosvVesU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "156336675241-o73pu09pb576jifcuvb5imjtcjmrpggp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
