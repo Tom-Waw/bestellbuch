@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'catalog_controller.dart';
+import 'widgets/catalog_dialog.dart';
 import 'widgets/catalog_grid_view.dart';
 import 'widgets/catalog_tabbar.dart';
 
@@ -22,6 +23,24 @@ class CatalogPage extends StatelessWidget {
               ),
             ),
             body: const CatalogGridView(),
-          ));
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
+            floatingActionButton: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+              child: Row(
+                children: [
+                  if (!CatalogController.to.isRoot)
+                    FloatingActionButton(
+                      onPressed: () => CatalogController.to.back(),
+                      child: const Icon(Icons.arrow_back),
+                    ),
+                  const Spacer(),
+                  FloatingActionButton(
+                    onPressed: () => Get.dialog(const CatalogDialog()),
+                    child: const Icon(Icons.add),
+                  ),
+                ],
+              ),
+            )));
   }
 }

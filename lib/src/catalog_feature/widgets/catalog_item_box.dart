@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 import '../catalog_controller.dart';
 import '../catalog.dart';
@@ -11,15 +10,25 @@ class CatalogItemBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<CatalogController>();
-
     return GestureDetector(
-      onTap: () => controller.select(item),
+      onTap: () => CatalogController.to.select(item),
       child: Container(
         decoration: const BoxDecoration(
-          color: Colors.red,
+          color: Colors.blue,
         ),
-        child: Center(child: Text(item.name, textAlign: TextAlign.center)),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(item.name, textAlign: TextAlign.center),
+            if (item is Product) ...[
+              const SizedBox(height: 5),
+              Text(
+                "${(item as Product).price.toStringAsFixed(2)} €",
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ],
+        ),
       ),
     );
   }
