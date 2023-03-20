@@ -2,32 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../catalog_controller.dart';
-import '../catalog.dart';
 
 class CatalogTabBar extends StatelessWidget {
   const CatalogTabBar({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<CatalogController>();
-
     return Obx(() => Row(
-          children: controller.root.value.parent.items
-              .cast<Catalog>()
+          children: CatalogController.to.roots
               .map((catalog) => Expanded(
                     child: Container(
                       decoration: BoxDecoration(
                         border: Border(
                           bottom: BorderSide(
                             width: 1.5,
-                            color: catalog == controller.root.value
+                            color: catalog == CatalogController.to.current
                                 ? Colors.white
                                 : Colors.transparent,
                           ),
                         ),
                       ),
                       child: InkWell(
-                        onTap: () => controller.select(catalog),
+                        onTap: () => CatalogController.to.select(catalog),
                         child: Ink(
                           padding: const EdgeInsets.symmetric(vertical: 8.0),
                           child: Column(children: [
