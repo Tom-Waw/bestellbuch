@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 
 abstract class CatalogItem {
-  final int id;
+  static int count = 0;
+
+  late final int id;
   Catalog? _parent;
   final String name;
 
-  CatalogItem(this.id, this.name);
+  CatalogItem(this.name) {
+    id = count++;
+  }
 
   Catalog get parent => _parent!;
   void setParent(Catalog parent) {
@@ -14,10 +18,10 @@ abstract class CatalogItem {
 }
 
 class Catalog extends CatalogItem {
-  final IconData icon;
+  final IconData? icon;
   final List<CatalogItem> items;
 
-  Catalog(super.id, super.name, this.icon, this.items) {
+  Catalog(super.name, this.items, {this.icon}) {
     for (CatalogItem item in items) {
       item._parent = this;
     }
@@ -25,7 +29,7 @@ class Catalog extends CatalogItem {
 }
 
 class Product extends CatalogItem {
-  final double cost;
+  final double price;
 
-  Product(super.id, super.name, this.cost);
+  Product(super.name, this.price);
 }

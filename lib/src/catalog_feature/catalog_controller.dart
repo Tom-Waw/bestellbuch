@@ -62,8 +62,10 @@ class CatalogController extends GetxController {
     if (item == null) return;
 
     // Store the new Item in memory
-    _current.value.items.add(item);
-    item.setParent(_current.value);
+    _current.update((val) {
+      val?.items.add(item);
+    });
+    item.setParent(current);
     // Persist the changes to a database
     await _catalogService.add(item);
   }
@@ -75,7 +77,9 @@ class CatalogController extends GetxController {
     }
 
     // Remove Item from memory
-    _current.value.items.remove(item);
+    _current.update((val) {
+      val?.items.remove(item);
+    });
     // Persist the changes to a database
     await _catalogService.delete(item);
   }
