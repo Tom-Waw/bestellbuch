@@ -27,14 +27,7 @@ the `lib/src/localization` directory.
 
 ## Firebase Information
 
-Project Name: 
-bestellbuch 
-
-Project ID:
-bestellbuch-59c64
-
-Project Number:
-156336675241
+...ist natürlich geheim, wär ja voll dumm, das hier öffentlich zu machen
 
 To support additional languages, please visit the tutorial on
 [Internationalizing Flutter
