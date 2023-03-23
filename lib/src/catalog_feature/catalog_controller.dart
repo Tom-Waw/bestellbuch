@@ -23,13 +23,11 @@ class CatalogController extends GetxController {
 
   // Allow Widgets to read the currently selected catalog.
   Catalog get current {
-    Catalog res = _current.value;
-    res.items.sort((a, b) => a.name.compareTo(b.name));
-    return res;
+    Catalog c = _current.value;
+    c.items.sort((a, b) => a.name.compareTo(b.name));
+    return c;
   }
 
-  // Allow Widgets to check wether currently on root catalog or not.
-  bool get isRoot => _current.value.parent == _root.value;
   // Allow Widgets to read the root catalogs.
   List<Catalog> get roots => _root.value.items.cast<Catalog>();
   // Allow Widgets to read the currently selected catalog.

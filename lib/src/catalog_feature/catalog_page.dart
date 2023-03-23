@@ -29,7 +29,8 @@ class CatalogPage extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
               child: Row(
                 children: [
-                  if (!CatalogController.to.isRoot)
+                  if (!CatalogController.to.roots
+                      .contains(CatalogController.to.current))
                     FloatingActionButton(
                       onPressed: () => CatalogController.to.back(),
                       child: const Icon(Icons.arrow_back),
