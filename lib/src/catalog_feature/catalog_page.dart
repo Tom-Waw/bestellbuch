@@ -42,6 +42,7 @@ class CatalogPage extends StatelessWidget {
                   ),
                 ],
               ),
-            )));
+            ),
+          ));
   }
 }

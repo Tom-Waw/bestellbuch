@@ -30,6 +30,6 @@ class CatalogService {
         ]),
       );
 
-  Future<void> add(CatalogItem item) async {}
-  Future<void> delete(CatalogItem item) async {}
+  Future<void> add(CatalogItem c) async {}
+  Future<void> delete(CatalogItem c) async {}
 }

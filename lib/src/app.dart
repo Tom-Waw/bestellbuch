@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'catalog_feature/catalog_binding.dart';
-import 'catalog_feature/catalog_page.dart';
+import 'routes/routes.dart';
 
 /// The Widget that configures your application.
 class BestellBuchApp extends StatelessWidget {
@@ -14,14 +13,8 @@ class BestellBuchApp extends StatelessWidget {
       title: "Bestellbuch",
       navigatorKey: GlobalKey(debugLabel: "app"),
       theme: ThemeData(),
-      getPages: [
-        GetPage(
-          name: "/home",
-          page: () => const CatalogPage(),
-          binding: CatalogBinding(),
-        ),
-      ],
-      initialRoute: "/home",
+      getPages: getPages,
+      initialRoute: Routes.home,
     );
   }
 }

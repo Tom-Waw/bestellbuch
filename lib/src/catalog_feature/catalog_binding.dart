@@ -6,6 +6,6 @@ import 'catalog_service.dart';
 class CatalogBinding extends Bindings {
   @override
   void dependencies() {
-    Get.put(CatalogController(CatalogService()), permanent: true);
+    Get.lazyPut(() => CatalogController(CatalogService()));
   }
 }
