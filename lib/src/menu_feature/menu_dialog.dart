@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
-import 'catalog_form.dart';
+import 'menu_form.dart';
 import 'product_form.dart';
 
-class CatalogDialog extends StatefulWidget {
-  const CatalogDialog({super.key});
+class MenuDialog extends StatefulWidget {
+  const MenuDialog({super.key});
 
   @override
-  State<CatalogDialog> createState() => _CatalogDialogState();
+  State<MenuDialog> createState() => _MenuDialogState();
 }
 
-class _CatalogDialogState extends State<CatalogDialog> {
+class _MenuDialogState extends State<MenuDialog> {
   bool? _isProductForm;
 
   @override
@@ -54,9 +54,7 @@ class _CatalogDialogState extends State<CatalogDialog> {
                       ),
                     ],
                     if (_isProductForm != null)
-                      _isProductForm!
-                          ? const ProductForm()
-                          : const CatalogForm()
+                      _isProductForm! ? const ProductForm() : const MenuForm()
                   ],
                 ),
               ),

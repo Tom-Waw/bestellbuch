@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../catalog_controller.dart';
-import '../catalog.dart';
+import '../data/menu.dart';
+import '../management/main_controller.dart';
 
-class CatalogItemBox extends StatelessWidget {
-  final CatalogItem item;
+class MenuItemBox extends StatelessWidget {
+  final MenuItem item;
 
-  const CatalogItemBox({super.key, required this.item});
+  const MenuItemBox({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => CatalogController.to.select(item),
+      onTap: () => MainController.to.selectMenu(item),
       child: Container(
         decoration: const BoxDecoration(
           color: Colors.blue,
@@ -24,7 +24,7 @@ class CatalogItemBox extends StatelessWidget {
             content: const SizedBox(height: 0.0),
             contentPadding: const EdgeInsets.only(bottom: 25.0),
             onConfirm: () {
-              CatalogController.to.delete(item);
+              MainController.to.deleteFromMenu(item);
               Get.back();
             },
             buttonColor: Colors.red,

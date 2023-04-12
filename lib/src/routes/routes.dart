@@ -1,14 +1,12 @@
 import 'package:get/get.dart';
 
 import 'home_page.dart';
-import '../catalog_feature/catalog_binding.dart';
-import '../catalog_feature/catalog_page.dart';
-import '../tables_feature/tables_page.dart';
-import '../tables_feature/tables_binding.dart';
+import '../pages/menu_page.dart';
+import '../pages/tables_page.dart';
 
 class Routes {
   static String home = '/home';
-  static String catalog = '/catalog';
+  static String menu = '/menu';
   static String tables = '/tables';
 }
 
@@ -18,13 +16,11 @@ final getPages = [
     page: () => const HomePage(),
   ),
   GetPage(
-    name: Routes.catalog,
-    page: () => const CatalogPage(),
-    binding: CatalogBinding(),
+    name: Routes.menu,
+    page: () => const MenuPage(),
   ),
   GetPage(
     name: Routes.tables,
     page: () => const TablesPage(),
-    binding: TablesBinding(),
   ),
 ];

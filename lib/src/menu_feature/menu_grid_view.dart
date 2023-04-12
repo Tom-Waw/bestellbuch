@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../catalog.dart';
-import '../catalog_controller.dart';
-import 'catalog_item_box.dart';
+import 'menu_item_box.dart';
+import '../management/main_controller.dart';
 
-class CatalogGridView extends StatelessWidget {
-  const CatalogGridView({super.key});
+class MenuGridView extends StatelessWidget {
+  const MenuGridView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,8 +14,8 @@ class CatalogGridView extends StatelessWidget {
         crossAxisCount: 3,
         crossAxisSpacing: 8.0,
         mainAxisSpacing: 8.0,
-        children: CatalogController.to.current.items
-            .map((item) => CatalogItemBox(item: item))
+        children: MainController.to.menu.items
+            .map((item) => MenuItemBox(item: item))
             .toList()));
   }
 }

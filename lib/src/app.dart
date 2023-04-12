@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'management/main_binding.dart';
 import 'routes/routes.dart';
 
 /// The Widget that configures your application.
@@ -15,6 +16,7 @@ class BestellBuchApp extends StatelessWidget {
       theme: ThemeData(),
       getPages: getPages,
       initialRoute: Routes.home,
+      initialBinding: MainBinding(),
     );
   }
 }

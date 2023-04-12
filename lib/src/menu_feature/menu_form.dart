@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../catalog.dart';
-import '../catalog_controller.dart';
+import '../data/menu.dart';
+import '../management/main_controller.dart';
 
-class CatalogForm extends StatefulWidget {
-  const CatalogForm({super.key});
+class MenuForm extends StatefulWidget {
+  const MenuForm({super.key});
 
   @override
-  State<CatalogForm> createState() => _CatalogFormState();
+  State<MenuForm> createState() => _MenuFormState();
 }
 
-class _CatalogFormState extends State<CatalogForm> {
+class _MenuFormState extends State<MenuForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   final TextEditingController _nameController = TextEditingController();
@@ -39,8 +39,8 @@ class _CatalogFormState extends State<CatalogForm> {
             child: ElevatedButton(
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
-                  CatalogController.to.add(
-                    Catalog(_nameController.text, []),
+                  MainController.to.addToMenu(
+                    Menu(_nameController.text, []),
                   );
                   Get.back();
                 }
