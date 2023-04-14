@@ -16,9 +16,9 @@ final getPages = [
     page: () => const HomePage(),
   ),
   GetPage(
-    name: Routes.menu,
-    page: () => const MenuPage(),
-  ),
+      name: Routes.menu,
+      page: () => const MenuPage(),
+      transition: Transition.noTransition),
   GetPage(
     name: Routes.tables,
     page: () => const TablesPage(),

@@ -11,7 +11,6 @@ class MainController extends GetxController {
 
   late final APIService _api;
   late Rx<Store> _store;
-  late Rx<Menu> _ptrMenu;
 
   MainController(this._api);
 
@@ -27,7 +26,6 @@ class MainController extends GetxController {
   Future<void> loadData() async {
     isLoading(true);
     _store = (await _api.fetchData()).obs;
-    _ptrMenu = rootMenus.first.obs;
     isLoading(false);
   }
 
@@ -60,46 +58,18 @@ class MainController extends GetxController {
   }
 
   //? ####################### MENU FEATURE #######################
-  // Allow Widgets to read the currently selected menu.
-  Menu get menu {
-    Menu m = _ptrMenu.value;
-    m.items.sort((a, b) => a.name.compareTo(b.name));
-    return m;
-  }
-
   // Allow Widgets to read the root menus.
   List<Menu> get rootMenus => _store.value.menu.items.cast<Menu>();
-  // Allow Widgets to read the currently selected root menu.
-  Menu get selectedRootMenu {
-    Menu m = menu;
-    while (m.parent != _store.value.menu) {
-      m = m.parent;
-    }
-    return m;
-  }
-
-  /// Select menu as current menu.
-  void selectMenu(MenuItem menu) {
-    if (menu is! Menu) return;
-    _ptrMenu(menu);
-  }
-
-  /// Jump to parent of current menu.
-  void back() {
-    if (menu.parent == _store.value.menu) return;
-    _ptrMenu(menu.parent);
-  }
 
   /// Add and persist a new product based on the user's inputs.
-  Future<void> addToMenu(MenuItem? item) async {
+  Future<void> addToMenu(MenuItem? item, Menu menu) async {
     if (item == null) return;
 
     // Store the new Item in memory
-    item.setParent(menu);
-    _ptrMenu.update((val) {
-      val?.items.add(item);
+    _store.update((val) {
+      item.setParent(menu);
+      menu.items.add(item);
     });
-    // ! _store.update();
 
     // Persist the changes to a database
     await _api.add(item);
@@ -112,10 +82,9 @@ class MainController extends GetxController {
     }
 
     // Remove Item from memory
-    _ptrMenu.update((val) {
-      val?.items.remove(item);
+    _store.update((val) {
+      item.parent.items.remove(item);
     });
-    // ! _store.update();
 
     // Persist the changes to a database
     await _api.delete(item);

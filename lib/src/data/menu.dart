@@ -26,6 +26,12 @@ class Menu extends MenuItem {
       item._parent = this;
     }
   }
+
+  Menu? getRoot() {
+    if (_parent == null) return null;
+    if (_parent?._parent == null) return this;
+    return _parent?.getRoot();
+  }
 }
 
 class Product extends MenuItem {

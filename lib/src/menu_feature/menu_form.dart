@@ -3,9 +3,12 @@ import 'package:get/get.dart';
 
 import '../data/menu.dart';
 import '../management/main_controller.dart';
+import '../routes/routes.dart';
 
 class MenuForm extends StatefulWidget {
-  const MenuForm({super.key});
+  final Menu menu;
+
+  const MenuForm({super.key, required this.menu});
 
   @override
   State<MenuForm> createState() => _MenuFormState();
@@ -41,8 +44,9 @@ class _MenuFormState extends State<MenuForm> {
                 if (_formKey.currentState!.validate()) {
                   MainController.to.addToMenu(
                     Menu(_nameController.text, []),
+                    widget.menu,
                   );
-                  Get.back();
+                  Get.offAndToNamed(Routes.menu, arguments: widget.menu);
                 }
               },
               child: const Text("Bestätigen"),

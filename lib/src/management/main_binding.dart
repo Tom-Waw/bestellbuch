@@ -6,6 +6,6 @@ import 'main_controller.dart';
 class MainBinding implements Bindings {
   @override
   void dependencies() {
-    Get.lazyPut(() => MainController(APIService()), fenix: true);
+    Get.put(MainController(APIService()), permanent: true);
   }
 }
