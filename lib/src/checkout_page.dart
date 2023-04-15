@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:bestellbuch/src/print_page.dart';
 import 'package:intl/intl.dart';
 
-class HomePage extends StatelessWidget {
+class CheckoutPage extends StatelessWidget {
   final List<Map<String, dynamic>> data = [
     {'title': 'Ki-Schni', 'price': 15, 'qty': 2},
     {'title': 'Shisha Schoko Zitrone', 'price': 5, 'qty': 5},
