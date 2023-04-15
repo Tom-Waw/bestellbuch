@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 
 import '../data/menu.dart';
 import '../management/main_controller.dart';
-import '../routes/routes.dart';
 
 class MenuItemBox extends StatelessWidget {
   final MenuItem item;
@@ -17,9 +16,8 @@ class MenuItemBox extends StatelessWidget {
         color: Colors.blue,
       ),
       child: InkWell(
-        onTap: () => item is Menu
-            ? Get.offAndToNamed(Routes.menu, arguments: item as Menu)
-            : null,
+        onTap: () =>
+            item is Menu ? MainController.to.openMenu(item as Menu) : null,
         onLongPress: () => Get.defaultDialog(
           title: "Willst du dieses Element wirklich löschen?",
           titlePadding: const EdgeInsets.fromLTRB(25.0, 25.0, 25.0, 0.0),

@@ -6,7 +6,6 @@ import '../management/main_controller.dart';
 import '../menu_feature/menu_dialog.dart';
 import '../menu_feature/menu_grid_view.dart';
 import '../menu_feature/menu_tabbar.dart';
-import '../routes/routes.dart';
 
 /// Displays the menu that is managed by the admin.
 class MenuPage extends StatelessWidget {
@@ -19,34 +18,31 @@ class MenuPage extends StatelessWidget {
         return const Center(child: CircularProgressIndicator());
       }
 
-      Menu menu = Get.arguments ?? MainController.to.rootMenus.first;
-      Menu root = menu.getRoot()!;
-
+      Menu menu = MainController.to.menu;
       return Scaffold(
         appBar: AppBar(
-          title: Text(menu == root ? "Menu" : menu.name),
-          bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(50),
-            child: MenuTabBar(root: root),
+          title: Text(menu == menu.getRoot() ? "Menu" : menu.name),
+          bottom: const PreferredSize(
+            preferredSize: Size.fromHeight(50),
+            child: MenuTabBar(),
           ),
         ),
-        body: MenuGridView(menu: menu),
+        body: const MenuGridView(),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
           child: Row(
             children: [
-              if (menu != root)
+              if (menu != menu.getRoot())
                 FloatingActionButton(
                   heroTag: null,
-                  onPressed: () =>
-                      Get.offAndToNamed(Routes.menu, arguments: menu.parent),
+                  onPressed: () => MainController.to.closeMenu(),
                   child: const Icon(Icons.arrow_back),
                 ),
               const Spacer(),
               FloatingActionButton(
                 heroTag: null,
-                onPressed: () => Get.dialog(MenuDialog(menu: menu)),
+                onPressed: () => Get.dialog(const MenuDialog()),
                 child: const Icon(Icons.add),
               ),
             ],

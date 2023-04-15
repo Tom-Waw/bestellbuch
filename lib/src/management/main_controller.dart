@@ -11,6 +11,7 @@ class MainController extends GetxController {
 
   late final APIService _api;
   late Rx<Store> _store;
+  late Rx<Menu> _menuPtr;
 
   MainController(this._api);
 
@@ -18,14 +19,16 @@ class MainController extends GetxController {
 
   @override
   Future<void> onInit() async {
-    super.onInit();
     loadData();
+    super.onInit();
   }
 
   /// Load the store data from the APIService.
   Future<void> loadData() async {
     isLoading(true);
-    _store = (await _api.fetchData()).obs;
+    Store data = await _api.fetchData();
+    _store = data.obs;
+    _menuPtr = (data.menu.items.first as Menu).obs;
     isLoading(false);
   }
 
@@ -61,14 +64,25 @@ class MainController extends GetxController {
   // Allow Widgets to read the root menus.
   List<Menu> get rootMenus => _store.value.menu.items.cast<Menu>();
 
+  // Allow Widgets to read the current menu.
+  Menu get menu => _menuPtr.value;
+
+  void openMenu(Menu menu) {
+    _menuPtr(menu);
+  }
+
+  void closeMenu() {
+    _menuPtr(_menuPtr.value.parent);
+  }
+
   /// Add and persist a new product based on the user's inputs.
-  Future<void> addToMenu(MenuItem? item, Menu menu) async {
+  Future<void> addToMenu(MenuItem? item) async {
     if (item == null) return;
 
     // Store the new Item in memory
-    _store.update((val) {
+    _menuPtr.update((val) {
       item.setParent(menu);
-      menu.items.add(item);
+      val?.items.add(item);
     });
 
     // Persist the changes to a database
@@ -82,8 +96,8 @@ class MainController extends GetxController {
     }
 
     // Remove Item from memory
-    _store.update((val) {
-      item.parent.items.remove(item);
+    _menuPtr.update((val) {
+      val?.items.remove(item);
     });
 
     // Persist the changes to a database

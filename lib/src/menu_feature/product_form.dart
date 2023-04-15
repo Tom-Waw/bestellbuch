@@ -4,12 +4,9 @@ import 'package:get/get.dart';
 
 import '../data/menu.dart';
 import '../management/main_controller.dart';
-import '../routes/routes.dart';
 
 class ProductForm extends StatefulWidget {
-  final Menu menu;
-
-  const ProductForm({super.key, required this.menu});
+  const ProductForm({super.key});
 
   @override
   State<ProductForm> createState() => _ProductFormState();
@@ -61,13 +58,11 @@ class _ProductFormState extends State<ProductForm> {
             child: ElevatedButton(
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
-                  MainController.to.addToMenu(
-                      Product(
-                        _nameController.text,
-                        double.parse(_priceController.text),
-                      ),
-                      widget.menu);
-                  Get.offAndToNamed(Routes.menu, arguments: widget.menu);
+                  MainController.to.addToMenu(Product(
+                    _nameController.text,
+                    double.parse(_priceController.text),
+                  ));
+                  Get.back();
                 }
               },
               child: const Text("Bestätigen"),

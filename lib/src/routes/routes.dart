@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 
-import 'home_page.dart';
+import '../pages/home_page.dart';
 import '../pages/menu_page.dart';
 import '../pages/tables_page.dart';
 
@@ -16,9 +16,9 @@ final getPages = [
     page: () => const HomePage(),
   ),
   GetPage(
-      name: Routes.menu,
-      page: () => const MenuPage(),
-      transition: Transition.noTransition),
+    name: Routes.menu,
+    page: () => const MenuPage(),
+  ),
   GetPage(
     name: Routes.tables,
     page: () => const TablesPage(),

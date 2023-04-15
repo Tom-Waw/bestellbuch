@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../data/menu.dart';
 import 'menu_form.dart';
 import 'product_form.dart';
 
 class MenuDialog extends StatefulWidget {
-  final Menu menu;
-
-  const MenuDialog({super.key, required this.menu});
+  const MenuDialog({super.key});
 
   @override
   State<MenuDialog> createState() => _MenuDialogState();
@@ -57,9 +54,7 @@ class _MenuDialogState extends State<MenuDialog> {
                       ),
                     ],
                     if (_isProductForm != null)
-                      _isProductForm!
-                          ? ProductForm(menu: widget.menu)
-                          : MenuForm(menu: widget.menu)
+                      _isProductForm! ? const ProductForm() : const MenuForm()
                   ],
                 ),
               ),
