@@ -1,36 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../catalog_controller.dart';
+import '../management/main_controller.dart';
 
-class CatalogTabBar extends StatelessWidget {
-  const CatalogTabBar({super.key});
+class MenuTabBar extends StatelessWidget {
+  const MenuTabBar({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Obx(() => Row(
-          children: CatalogController.to.roots
-              .map((catalog) => Expanded(
+          children: MainController.to.rootMenus
+              .map((menu) => Expanded(
                     child: Container(
                       decoration: BoxDecoration(
                         border: Border(
                           bottom: BorderSide(
                             width: 1.5,
-                            color: catalog == CatalogController.to.current
+                            color: menu == MainController.to.menu.getRoot()
                                 ? Colors.white
                                 : Colors.transparent,
                           ),
                         ),
                       ),
                       child: InkWell(
-                        onTap: () => CatalogController.to.select(catalog),
+                        onTap: () => MainController.to.openMenu(menu),
                         child: Ink(
                           padding: const EdgeInsets.symmetric(vertical: 8.0),
                           child: Column(children: [
-                            Icon(catalog.icon, color: Colors.white),
+                            Icon(menu.icon, color: Colors.white),
                             const SizedBox(height: 6.0),
                             Text(
-                              catalog.name,
+                              menu.name,
                               style: const TextStyle(color: Colors.white),
                             )
                           ]),

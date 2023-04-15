@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-import '../catalog.dart';
-import '../catalog_controller.dart';
+import '../data/menu.dart';
+import '../management/main_controller.dart';
 
 class ProductForm extends StatefulWidget {
   const ProductForm({super.key});
@@ -58,12 +58,10 @@ class _ProductFormState extends State<ProductForm> {
             child: ElevatedButton(
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
-                  CatalogController.to.add(
-                    Product(
-                      _nameController.text,
-                      double.parse(_priceController.text),
-                    ),
-                  );
+                  MainController.to.addToMenu(Product(
+                    _nameController.text,
+                    double.parse(_priceController.text),
+                  ));
                   Get.back();
                 }
               },
