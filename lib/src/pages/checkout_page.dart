@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:bestellbuch/src/print_page.dart';
-import 'package:intl/intl.dart';
+import 'package:bestellbuch/src/pages/print_page.dart';
 
 class CheckoutPage extends StatelessWidget {
   final List<Map<String, dynamic>> data = [
