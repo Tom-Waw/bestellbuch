@@ -45,7 +45,7 @@ class MainController extends GetxController {
       val?.tables.add(t);
     });
     // Persist the changes to a database
-    await _api.add(t);
+    //await _api.add(t);
   }
 
   /// Delete an existing table completely.
@@ -57,7 +57,7 @@ class MainController extends GetxController {
       val?.tables.remove(t);
     });
     // Persist the changes to a database
-    await _api.delete(t);
+    //await _api.delete(t);
   }
 
   //? ####################### MENU FEATURE #######################
@@ -86,7 +86,7 @@ class MainController extends GetxController {
     });
 
     // Persist the changes to a database
-    await _api.add(item);
+    await _api.addToMenu(item);
   }
 
   /// Delete an existing product or menu completely.
@@ -101,6 +101,6 @@ class MainController extends GetxController {
     });
 
     // Persist the changes to a database
-    await _api.delete(item);
+    //await _api.delete(item);
   }
 }
