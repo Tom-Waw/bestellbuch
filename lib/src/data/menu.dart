@@ -34,19 +34,19 @@ class Menu extends MenuItem {
     SnapshotOptions? options,
   ) {
     final data = snapshot.data();
-    var items = data?['items'] is Iterable ? List.from(data?['items']) : null,
-    items = items.map((item) => item.containsKey("price")? Product.fromFirestore(snapshot, options))
-    return Menu(
-      name: data?['name'],
-      items:
-          data?['items'] is Iterable ? List.from(data?['items']) : null,
-    );
+    // var items = data?['items'] is Iterable ? List.from(data?['items']) : null,
+    // items = items.map((item) => item.containsKey("price")? Product.fromFirestore(snapshot, options))
+    return Menu("fake", []
+        // name: data?['name'],
+        // items:
+        //     data?['items'] is Iterable ? List.from(data?['items']) : null,
+        );
   }
 
   Map<String, dynamic> toFirestore() {
     return {
-      if (name != null) "name": name,
-      if (items != null) "items": items,
+      // if (name != null) "name": name,
+      // if (items != null) "items": items,
     };
   }
 }
@@ -61,16 +61,16 @@ class Product extends MenuItem {
     SnapshotOptions? options,
   ) {
     final data = snapshot.data();
-    return Product(
-      name: data?['name'],
-      price: data?['price'],
-    );
+    return Product("fake", 1
+        // name: data?['name'],
+        // price: data?['price'],
+        );
   }
 
   Map<String, dynamic> toFirestore() {
     return {
-      if (name != null) "name": name,
-      if (price != null) "price": price,
+      // if (name != null) "name": name,
+      // if (price != null) "price": price,
     };
   }
 }

@@ -28,7 +28,7 @@ class MainController extends GetxController {
     isLoading(true);
     Store data = await _api.fetchData();
     _store = data.obs;
-    _menuPtr = (data.menu.items.first as Menu).obs;
+    _menuPtr = data.menus.first.obs;
     isLoading(false);
   }
 
@@ -62,7 +62,7 @@ class MainController extends GetxController {
 
   //? ####################### MENU FEATURE #######################
   // Allow Widgets to read the root menus.
-  List<Menu> get rootMenus => _store.value.menu.items.cast<Menu>();
+  List<Menu> get rootMenus => _store.value.menus;
 
   // Allow Widgets to read the current menu.
   Menu get menu => _menuPtr.value;
@@ -91,7 +91,7 @@ class MainController extends GetxController {
 
   /// Delete an existing product or menu completely.
   Future<void> deleteFromMenu(MenuItem? item) async {
-    if (item == null || [item, item.parent].contains(_store.value.menu)) {
+    if (item == null || rootMenus.contains(item)) {
       return;
     }
 

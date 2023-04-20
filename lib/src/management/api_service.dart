@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart' hide Table;
 
 import '../data/menu.dart';
 import '../data/store.dart';
@@ -9,10 +8,18 @@ class APIService {
   Future<Store> fetchData() async {
     var db = FirebaseFirestore.instance;
 
-    var menu = db.collection("Menu").where("name", isEqualTo: "root");
-    var tables = db.collection("Tables");
+    //var menu = await db.collection("Menu").where("name", isEqualTo: "root").get();
+    var tables = await db
+        .collection("Tables")
+        .withConverter(
+          fromFirestore: Table.fromFirestore,
+          toFirestore: (Table table, _) => table.toFirestore(),
+        )
+        .get();
 
-    return Store(menu as Menu, tables as List<Table>);
+    print(tables);
+
+    return Store([], tables as List<Table>);
   }
 
   Future<void> addToMenu(MenuItem? item) async {
