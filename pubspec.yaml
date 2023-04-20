@@ -7,7 +7,7 @@ publish_to: "none"
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.19.3 <3.0.0"
+  sdk: ">=2.19.3 <3.0.0" # dart
 
 dependencies:
   flutter:
@@ -17,6 +17,7 @@ dependencies:
 
   get: ^4.6.5
   http: ^0.13.5
+  more: ^3.9.5
 
   bluetooth_print: ^4.3.0
 

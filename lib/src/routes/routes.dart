@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import '../pages/checkout_page.dart';
 import '../pages/home_page.dart';
 import '../pages/menu_page.dart';
+import '../pages/print_page.dart';
 import '../pages/tables_page.dart';
 
 class Routes {
@@ -10,6 +11,7 @@ class Routes {
   static String menu = '/menu';
   static String tables = '/tables';
   static String checkout = '/checkout';
+  static String print = '/print';
 }
 
 final getPages = [
@@ -28,5 +30,9 @@ final getPages = [
   GetPage(
     name: Routes.checkout,
     page: () => CheckoutPage(),
+  ),
+  GetPage(
+    name: Routes.print,
+    page: () => PrintPage(),
   ),
 ];

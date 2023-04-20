@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:bestellbuch/src/pages/print_page.dart';
+import 'package:get/get.dart';
+
+import '../routes/routes.dart';
 
 class CheckoutPage extends StatelessWidget {
   final List<Map<String, dynamic>> data = [
@@ -12,6 +14,8 @@ class CheckoutPage extends StatelessWidget {
 
   final f = NumberFormat("\$###,###.00", "en_US");
 
+  const CheckoutPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     int _total = 0;
@@ -21,7 +25,7 @@ class CheckoutPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Flutter - Thermal Printer'),
+        title: const Text('Flutter - Thermal Printer'),
         backgroundColor: Colors.redAccent,
       ),
       body: Column(
@@ -33,7 +37,7 @@ class CheckoutPage extends StatelessWidget {
                 return ListTile(
                   title: Text(
                     data[i]['title'].toString(),
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
@@ -52,32 +56,27 @@ class CheckoutPage extends StatelessWidget {
           ),
           Container(
             color: Colors.grey[200],
-            padding: EdgeInsets.all(20),
+            padding: const EdgeInsets.all(20),
             child: Row(
               children: [
                 Text(
                   "Total: ${f.format(_total)}",
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(
-                  width: 80,
-                ),
+                const SizedBox(width: 80),
                 Expanded(
                   child: TextButton.icon(
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => PrintPage(data),
-                        ),
-                      );
+                      Get.toNamed(Routes.print);
                     },
-                    icon: Icon(Icons.print),
-                    label: Text('Print'),
+                    icon: const Icon(Icons.print),
+                    label: const Text('Print'),
                     style: TextButton.styleFrom(
-                        primary: Colors.white, backgroundColor: Colors.green),
+                      foregroundColor: Colors.white,
+                      backgroundColor: Colors.green,
+                    ),
                   ),
                 ),
               ],

@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 
 import 'api_service.dart';
 import '../data/menu.dart';
+import '../data/order.dart';
 import '../data/store.dart';
 import '../data/table.dart';
 
@@ -10,7 +11,8 @@ class MainController extends GetxController {
   RxBool isLoading = false.obs;
 
   late final APIService _api;
-  late Rx<Store> _store;
+  late final Rx<Store> _store;
+  late final Rx<Table?> _tablePtr = null.obs;
   late Rx<Menu> _menuPtr;
 
   MainController(this._api);
@@ -19,8 +21,8 @@ class MainController extends GetxController {
 
   @override
   Future<void> onInit() async {
-    loadData();
     super.onInit();
+    loadData();
   }
 
   /// Load the store data from the APIService.
@@ -102,5 +104,28 @@ class MainController extends GetxController {
 
     // Persist the changes to a database
     await _api.delete(item);
+  }
+
+//? ####################### ORDER FEATURE #######################
+// Allow Widgets to read the orders.
+  Map<Table, Order> get orders => _store.value.orders;
+
+  Order? get order => _store.value.orders[_tablePtr.value != null];
+
+  void openTable(Table table) {
+    _tablePtr(table);
+  }
+
+  void closeTable() {
+    _tablePtr(null);
+  }
+
+  /// Load the order data from the APIService.
+  Future<void> loadOrder() async {
+    isLoading(true);
+    Store data = await _api.fetchData();
+    _store = data.obs;
+    _menuPtr = (data.menu.items.first as Menu).obs;
+    isLoading(false);
   }
 }

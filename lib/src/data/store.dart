@@ -1,9 +1,11 @@
 import 'menu.dart';
+import 'order.dart';
 import 'table.dart';
 
 class Store {
-  final Menu menu;
   final List<Table> tables;
+  final Menu menu;
+  final Map<Table, Order> orders = {};
 
-  Store(this.menu, this.tables);
+  Store(this.tables, this.menu);
 }

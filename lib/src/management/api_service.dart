@@ -8,6 +8,7 @@ class APIService {
   Future<Store> fetchData() async => Future.delayed(
       const Duration(seconds: 1),
       () => Store(
+            List.generate(6, (_) => Table()),
             Menu("main", [
               Menu(
                 "Getränke",
@@ -31,7 +32,6 @@ class APIService {
                 icon: Icons.smoking_rooms,
               ),
             ]),
-            List.generate(6, (_) => Table()),
           ));
 
   Future<void> add(dynamic o) async {}

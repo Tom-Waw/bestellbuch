@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 
 class PrintPage extends StatefulWidget {
   final List<Map<String, dynamic>> data;
-  PrintPage(this.data);
+  
+  PrintPage();
 
   @override
   _PrintPageState createState() => _PrintPageState();
