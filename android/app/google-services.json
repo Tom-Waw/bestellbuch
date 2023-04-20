@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "844137022732",
+    "project_id": "bb-firebase-26fbf",
+    "storage_bucket": "bb-firebase-26fbf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:844137022732:android:51a83075e1881f4aa6f529",
+        "android_client_info": {
+          "package_name": "com.shahaab.bestellbuch"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "844137022732-hqoc8f2u6grkc2fvp7ofci2v652e5la7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC7pXByeC5545CicrzOjOxHuWFVrglYoaw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "844137022732-hqoc8f2u6grkc2fvp7ofci2v652e5la7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
