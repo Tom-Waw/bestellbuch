@@ -40,7 +40,7 @@ class _MenuFormState extends State<MenuForm> {
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
                   MainController.to.addToMenu(
-                    Menu(_nameController.text, []),
+                    Menu(name: _nameController.text, items: []),
                   );
                   Get.back();
                 }

@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Table {
-  final int? number;
+  final int number;
 
   const Table({required this.number});
 
@@ -10,16 +10,12 @@ class Table {
   factory Table.fromFirestore(
     DocumentSnapshot<Map<String, dynamic>> snapshot,
     SnapshotOptions? options,
-  ) {
-    final data = snapshot.data();
-    return Table(
-      number: data?['number'],
-    );
-  }
+  ) =>
+      Table(number: snapshot.data()!['number']);
 
   Map<String, dynamic> toFirestore() {
     return {
-      if (number != null) "number": number,
+      "number": number,
     };
   }
 }

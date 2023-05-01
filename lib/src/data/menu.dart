@@ -5,7 +5,7 @@ abstract class MenuItem {
   Menu? _parent;
   final String name;
 
-  MenuItem(this.name);
+  MenuItem({required this.name});
 
   Menu get parent => _parent!;
   void setParent(Menu parent) {
@@ -14,10 +14,9 @@ abstract class MenuItem {
 }
 
 class Menu extends MenuItem {
-  final IconData? icon;
   final List<MenuItem> items;
 
-  Menu(super.name, this.items, {this.icon}) {
+  Menu({required super.name, required this.items}) {
     for (MenuItem item in items) {
       item._parent = this;
     }
@@ -29,24 +28,20 @@ class Menu extends MenuItem {
     return _parent?.getRoot();
   }
 
-  factory Menu.fromFirestore(
+  factory Menu.fromJson(
     DocumentSnapshot<Map<String, dynamic>> snapshot,
     SnapshotOptions? options,
   ) {
-    final data = snapshot.data();
-    // var items = data?['items'] is Iterable ? List.from(data?['items']) : null,
-    // items = items.map((item) => item.containsKey("price")? Product.fromFirestore(snapshot, options))
-    return Menu("fake", []
-        // name: data?['name'],
-        // items:
-        //     data?['items'] is Iterable ? List.from(data?['items']) : null,
-        );
+    var data = snapshot.data()!;
+
+    print(data);
+    return Menu(name: data['name'], items: data["items"]);
   }
 
-  Map<String, dynamic> toFirestore() {
+  Map<String, dynamic> toJson() {
     return {
-      // if (name != null) "name": name,
-      // if (items != null) "items": items,
+      "name": name,
+      "items": items,
     };
   }
 }
@@ -54,23 +49,15 @@ class Menu extends MenuItem {
 class Product extends MenuItem {
   final double price;
 
-  Product(super.name, this.price);
+  Product({required super.name, required this.price});
 
-  factory Product.fromFirestore(
-    DocumentSnapshot<Map<String, dynamic>> snapshot,
-    SnapshotOptions? options,
-  ) {
-    final data = snapshot.data();
-    return Product("fake", 1
-        // name: data?['name'],
-        // price: data?['price'],
-        );
-  }
+  factory Product.fromJson(Map<String, dynamic> json) =>
+      Product(name: json["name"], price: json["price"]);
 
-  Map<String, dynamic> toFirestore() {
+  Map<String, dynamic> toJson() {
     return {
-      // if (name != null) "name": name,
-      // if (price != null) "price": price,
+      "name": name,
+      "price": price,
     };
   }
 }

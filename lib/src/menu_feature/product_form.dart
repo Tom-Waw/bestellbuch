@@ -59,8 +59,8 @@ class _ProductFormState extends State<ProductForm> {
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
                   MainController.to.addToMenu(Product(
-                    _nameController.text,
-                    double.parse(_priceController.text),
+                    name: _nameController.text,
+                    price: double.parse(_priceController.text),
                   ));
                   Get.back();
                 }

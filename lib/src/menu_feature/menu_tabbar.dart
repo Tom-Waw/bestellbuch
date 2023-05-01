@@ -26,14 +26,10 @@ class MenuTabBar extends StatelessWidget {
                         onTap: () => MainController.to.openMenu(menu),
                         child: Ink(
                           padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: Column(children: [
-                            Icon(menu.icon, color: Colors.white),
-                            const SizedBox(height: 6.0),
-                            Text(
-                              menu.name,
-                              style: const TextStyle(color: Colors.white),
-                            )
-                          ]),
+                          child: Text(
+                            menu.name,
+                            style: const TextStyle(color: Colors.white),
+                          ),
                         ),
                       ),
                     ),

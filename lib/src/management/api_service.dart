@@ -5,21 +5,27 @@ import '../data/store.dart';
 import '../data/table.dart';
 
 class APIService {
-  Future<Store> fetchData() async {
-    var db = FirebaseFirestore.instance;
-
-    //var menu = await db.collection("Menu").where("name", isEqualTo: "root").get();
-    var tables = await db
-        .collection("Tables")
-        .withConverter(
+  final tableRef = FirebaseFirestore.instance
+      .collection("Tables")
+      .withConverter<Table>(
           fromFirestore: Table.fromFirestore,
-          toFirestore: (Table table, _) => table.toFirestore(),
-        )
-        .get();
+          toFirestore: (table, _) => table.toFirestore());
 
-    print(tables);
+  final menuRef = FirebaseFirestore.instance
+      .collection("Menu")
+      .withConverter<Menu>(
+          fromFirestore: (snapshot, _) => Menu.fromJson(snapshot.data()!),
+          toFirestore: (menu, _) => menu.toJson())
+      .where("name", isEqualTo: "root");
 
-    return Store([], tables as List<Table>);
+  Future<Store> fetchData() async {
+    var menu = await menuRef.get();
+    var tables = await tableRef.get();
+
+    return Store(
+      menu.docs.map((m) => m.data()).toList(),
+      tables.docs.map((t) => t.data()).toList(),
+    );
   }
 
   Future<void> addToMenu(MenuItem? item) async {
