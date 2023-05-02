@@ -9,7 +9,8 @@ class MenuTabBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(() => Row(
-          children: MainController.to.rootMenus
+          children: (MainController.to.rootMenus
+                ..sort((a, b) => a.name.compareTo(b.name)))
               .map((menu) => Expanded(
                     child: Container(
                       decoration: BoxDecoration(
@@ -26,10 +27,11 @@ class MenuTabBar extends StatelessWidget {
                         onTap: () => MainController.to.openMenu(menu),
                         child: Ink(
                           padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: Text(
+                          child: Center(
+                              child: Text(
                             menu.name,
                             style: const TextStyle(color: Colors.white),
-                          ),
+                          )),
                         ),
                       ),
                     ),

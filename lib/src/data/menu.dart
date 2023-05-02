@@ -28,22 +28,22 @@ class Menu extends MenuItem {
     return _parent?.getRoot();
   }
 
-  factory Menu.fromJson(
-    DocumentSnapshot<Map<String, dynamic>> snapshot,
-    SnapshotOptions? options,
-  ) {
-    var data = snapshot.data()!;
+  factory Menu.fromJson(Map<String, dynamic> json) {
+    Menu menu = Menu(
+      name: json["name"],
+      items: json["items"],
+    );
 
-    print(data);
-    return Menu(name: data['name'], items: data["items"]);
+    for (var item in menu.items) {
+      item.setParent(menu);
+    }
+    return menu;
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      "name": name,
-      "items": items,
-    };
-  }
+  Map<String, dynamic> toJson() => {
+        "name": name,
+        "items": items,
+      };
 }
 
 class Product extends MenuItem {
@@ -51,13 +51,13 @@ class Product extends MenuItem {
 
   Product({required super.name, required this.price});
 
-  factory Product.fromJson(Map<String, dynamic> json) =>
-      Product(name: json["name"], price: json["price"]);
+  factory Product.fromJson(Map<String, dynamic> json) => Product(
+        name: json["name"],
+        price: json["price"],
+      );
 
-  Map<String, dynamic> toJson() {
-    return {
-      "name": name,
-      "price": price,
-    };
-  }
+  Map<String, dynamic> toJson() => {
+        "name": name,
+        "price": price,
+      };
 }

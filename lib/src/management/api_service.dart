@@ -13,20 +13,29 @@ class APIService {
 
   final menuRef = FirebaseFirestore.instance
       .collection("Menu")
-      .withConverter<Menu>(
-          fromFirestore: (snapshot, _) => Menu.fromJson(snapshot.data()!),
-          toFirestore: (menu, _) => menu.toJson())
       .where("name", isEqualTo: "root");
 
   Future<Store> fetchData() async {
-    var menu = await menuRef.get();
+    var menus = await _loadMenu(await menuRef.get());
     var tables = await tableRef.get();
 
     return Store(
-      menu.docs.map((m) => m.data()).toList(),
+      menus.cast<Menu>().first.items.cast<Menu>(),
       tables.docs.map((t) => t.data()).toList(),
     );
   }
+
+  Future<List<MenuItem>> _loadMenu(QuerySnapshot<Map<String, dynamic>> ref) =>
+      Future.wait(ref.docs.map((menu) async {
+        Map<String, dynamic> data = menu.data();
+
+        if (data.containsKey("price")) return Product.fromJson(data);
+
+        var innerRef = await menu.reference.collection("items").get();
+        data["items"] = await _loadMenu(innerRef);
+
+        return Menu.fromJson(data);
+      }));
 
   Future<void> addToMenu(MenuItem? item) async {
     if (item is Product) {
