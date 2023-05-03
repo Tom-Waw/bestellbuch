@@ -11,12 +11,7 @@ class TablesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(() => Scaffold(
-        appBar: AppBar(
-          title: const Text("Tischplan"),
-          actions: [
-            if (!MainController.to.isLoading.value) const TableAppBarButton()
-          ],
-        ),
+        appBar: TableAppBar(),
         body: MainController.to.isLoading.value
             ? const Center(child: CircularProgressIndicator())
             : ListView.builder(

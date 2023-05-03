@@ -1,19 +1,15 @@
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class APIService {
   final tableRef = FirebaseFirestore.instance.collection("Tables");
-  final menuRef = FirebaseFirestore.instance
-      .collection("Menu")
-      .where("name", isEqualTo: "root");
+  final menuRef = FirebaseFirestore.instance.collection("Menu");
 
   Future<Map<String, dynamic>> fetchData() async {
-    var menus = await _loadMenu(await menuRef.get());
+    var menus = await _loadMenu(await menuRef.orderBy("name").get());
     var tables = _loadTables(await tableRef.orderBy("number").get());
 
     return {
-      "menus": menus.first["items"],
+      "menus": menus,
       "tables": tables,
     };
   }
@@ -55,5 +51,18 @@ class APIService {
 
   Future<void> deleteTable(String id) async {
     await tableRef.doc(id).delete();
+  }
+
+  Future<Map<String, dynamic>> addToMenu(
+      Map<String, dynamic> data, String path) async {
+    var ref = await menuRef.doc(path).collection("items").add(data);
+
+    var response = (await ref.get()).data()!;
+    response["id"] = ref.id;
+    return response;
+  }
+
+  Future<void> deleteFromMenu(String path) async {
+    await menuRef.doc(path).delete();
   }
 }

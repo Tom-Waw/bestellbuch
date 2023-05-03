@@ -6,6 +6,8 @@ abstract class MenuItem {
 
   MenuItem({required this.id, required this.name});
 
+  String get path => parent != null ? "${parent?.path}/items/$id" : id;
+
   factory MenuItem.fromJson(Map<String, dynamic> json) =>
       json.containsKey("price") ? Product.fromJson(json) : Menu.fromJson(json);
 }
@@ -19,6 +21,8 @@ class Menu extends MenuItem {
     }
   }
 
+  bool get isRoot => parent?.parent == null;
+
   Menu? getRoot() {
     if (parent == null) return null;
     if (parent?.parent == null) return this;
@@ -28,7 +32,9 @@ class Menu extends MenuItem {
   factory Menu.fromJson(Map<String, dynamic> json) => Menu(
         id: json["id"],
         name: json["name"],
-        items: json["items"].map(MenuItem.fromJson).cast<MenuItem>().toList(),
+        items: json.containsKey("items")
+            ? json["items"].map(MenuItem.fromJson).cast<MenuItem>().toList()
+            : [],
       );
 
   Map<String, dynamic> toJson() => {

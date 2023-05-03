@@ -5,20 +5,25 @@ import 'package:numberpicker/numberpicker.dart';
 
 import '../management/main_controller.dart';
 
-class TableAppBarButton extends StatefulWidget {
-  const TableAppBarButton({super.key});
+class TableAppBar extends AppBar {
+  TableAppBar({super.key});
 
   @override
-  State<TableAppBarButton> createState() => _TableAppBarButtonState();
+  State<TableAppBar> createState() => _TableAppBarState();
 }
 
-class _TableAppBarButtonState extends State<TableAppBarButton> {
+class _TableAppBarState extends State<TableAppBar> {
   int _pickerValue = 0;
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-        onPressed: () => Get.defaultDialog(
+    return AppBar(
+      title: const Text("Tischplan"),
+      actions: [
+        if (!MainController.to.isLoading.value)
+          IconButton(
+            icon: const Icon(FontAwesomeIcons.plusMinus),
+            onPressed: () => Get.defaultDialog(
               titlePadding: const EdgeInsets.symmetric(vertical: 22.0),
               title: "Tische anpassen",
               content: StatefulBuilder(
@@ -46,6 +51,8 @@ class _TableAppBarButtonState extends State<TableAppBarButton> {
                 ),
               ],
             ),
-        icon: const Icon(FontAwesomeIcons.plusMinus));
+          )
+      ],
+    );
   }
 }

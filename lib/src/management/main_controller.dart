@@ -99,31 +99,44 @@ class MainController extends GetxController {
   }
 
   /// Add and persist a new product based on the user's inputs.
-  Future<void> addToMenu(MenuItem? item) async {
-    if (item == null) return;
+  void addToMenu(Map<String, dynamic> data) {
+    if (data.isEmpty) return;
 
-    // Store the new Item in memory
-    _menuPtr.update((val) {
-      item.parent = menu;
-      val?.items.add(item);
+    // Update observable
+    _store.update((_) async {
+      isLoading(true);
+
+      // Create data in database
+      var response = await _api.addToMenu(data, menu.path);
+      MenuItem item = MenuItem.fromJson(response);
+
+      // Save data in memory
+      _menuPtr.update((val) {
+        item.parent = val;
+        val?.items.add(item);
+      });
+
+      isLoading(false);
     });
-
-    // Persist the changes to a database
-    //await _api.addToMenu(item);
   }
 
   /// Delete an existing product or menu completely.
   Future<void> deleteFromMenu(MenuItem? item) async {
-    if (item == null || rootMenus.contains(item)) {
-      return;
-    }
+    if (item == null || rootMenus.contains(item)) return;
 
-    // Remove Item from memory
-    _menuPtr.update((val) {
-      val?.items.remove(item);
+    // Update observable
+    _store.update((_) async {
+      isLoading(true);
+
+      // Delete data from database
+      await _api.deleteFromMenu(item.path);
+
+      // Remove data from memory
+      _menuPtr.update((val) {
+        val?.items.remove(item);
+      });
+
+      isLoading(false);
     });
-
-    // Persist the changes to a database
-    //await _api.delete(item);
   }
 }
