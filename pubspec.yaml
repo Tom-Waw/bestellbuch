@@ -13,15 +13,17 @@ dependencies:
   flutter:
     sdk: flutter
 
-  cupertino_icons: ^1.0.2
-
   get: ^4.6.5
   http: ^0.13.5
-  more: ^3.9.5
 
-  bluetooth_print: ^4.3.0
+  cloud_firestore: ^4.5.2
+  firebase_core: ^2.10.0
 
+  cupertino_icons: ^1.0.2
   drag_and_drop_gridview: ^1.0.8
+  font_awesome_flutter: ^10.4.0
+  more: ^3.9.5
+  numberpicker: ^2.1.2
 
 dev_dependencies:
   flutter_test:

@@ -1,11 +1,9 @@
+import 'package:bestellbuch/src/menu_feature/menu_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../data/menu.dart';
 import '../management/main_controller.dart';
-import '../menu_feature/menu_dialog.dart';
-import '../menu_feature/menu_grid_view.dart';
-import '../menu_feature/menu_tabbar.dart';
+import '../menu_feature/menu_item_box.dart';
 
 /// Displays the menu that is managed by the admin.
 class MenuPage extends StatelessWidget {
@@ -13,42 +11,22 @@ class MenuPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      if (MainController.to.isLoading.value) {
-        return const Center(child: CircularProgressIndicator());
-      }
-
-      Menu menu = MainController.to.menu;
-      return Scaffold(
-        appBar: AppBar(
-          title: Text(menu == menu.getRoot() ? "Menu" : menu.name),
-          bottom: const PreferredSize(
-            preferredSize: Size.fromHeight(50),
-            child: MenuTabBar(),
-          ),
-        ),
-        body: const MenuGridView(),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-          child: Row(
-            children: [
-              if (menu != menu.getRoot())
-                FloatingActionButton(
-                  heroTag: null,
-                  onPressed: () => MainController.to.closeMenu(),
-                  child: const Icon(Icons.arrow_back),
-                ),
-              const Spacer(),
-              FloatingActionButton(
-                heroTag: null,
-                onPressed: () => Get.dialog(const MenuDialog()),
-                child: const Icon(Icons.add),
-              ),
-            ],
-          ),
-        ),
-      );
-    });
+    return Obx(() => MainController.to.isLoading.value
+        ? Scaffold(
+            appBar: AppBar(title: const Text("Menu")),
+            body: const Center(child: CircularProgressIndicator()),
+          )
+        : Scaffold(
+            appBar: const MenuAppBar(),
+            body: GridView.count(
+              padding: const EdgeInsets.all(8.0),
+              crossAxisCount: 3,
+              crossAxisSpacing: 8.0,
+              mainAxisSpacing: 8.0,
+              children: MainController.to.menu.items
+                  .map((item) => MenuItemBox(item: item))
+                  .toList(),
+            ),
+          ));
   }
 }

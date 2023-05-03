@@ -3,9 +3,9 @@ import 'order.dart';
 import 'table.dart';
 
 class Store {
+  final List<Menu> menus;
   final List<Table> tables;
-  final Menu menu;
   final Map<Table, Order> orders = {};
 
-  Store(this.tables, this.menu);
+  Store({required this.menus, required this.tables});
 }
