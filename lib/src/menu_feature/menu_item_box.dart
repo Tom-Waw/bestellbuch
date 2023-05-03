@@ -22,7 +22,7 @@ class MenuItemBox extends StatelessWidget {
           title: "Willst du dieses Element wirklich löschen?",
           titlePadding: const EdgeInsets.fromLTRB(25.0, 25.0, 25.0, 0.0),
           content: const SizedBox(height: 0.0),
-          contentPadding: const EdgeInsets.only(bottom: 25.0),
+          contentPadding: const EdgeInsets.only(bottom: 20.0),
           onConfirm: () {
             MainController.to.deleteFromMenu(item);
             Get.back();
@@ -35,7 +35,7 @@ class MenuItemBox extends StatelessWidget {
           children: [
             Text(item.name, textAlign: TextAlign.center),
             if (item is Product) ...[
-              const SizedBox(height: 5),
+              const SizedBox(height: 8.0),
               Text(
                 "${(item as Product).price.toStringAsFixed(2)} €",
                 textAlign: TextAlign.center,

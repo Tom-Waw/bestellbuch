@@ -1,11 +1,16 @@
 class Table {
-  static int count = 1;
+  String id;
+  final int number;
 
-  late final int id;
-  late final String name;
+  Table({required this.id, required this.number});
 
-  Table() {
-    id = count++;
-    name = "Tisch $id";
-  }
+  factory Table.fromJson(Map<String, dynamic> json) => Table(
+        id: json["id"],
+        number: json["number"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "number": number,
+      };
 }

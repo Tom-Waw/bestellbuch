@@ -2,8 +2,8 @@ import 'menu.dart';
 import 'table.dart';
 
 class Store {
-  final Menu menu;
+  final List<Menu> menus;
   final List<Table> tables;
 
-  Store(this.menu, this.tables);
+  Store({required this.menus, required this.tables});
 }

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:get/get.dart';
 
 import 'api_service.dart';
@@ -26,9 +28,15 @@ class MainController extends GetxController {
   /// Load the store data from the APIService.
   Future<void> loadData() async {
     isLoading(true);
-    Store data = await _api.fetchData();
-    _store = data.obs;
-    _menuPtr = (data.menu.items.first as Menu).obs;
+    var response = await _api.fetchData();
+
+    Store store = Store(
+      menus: response["menus"].map(Menu.fromJson).cast<Menu>().toList(),
+      tables: response["tables"].map(Table.fromJson).cast<Table>().toList(),
+    );
+
+    _store = store.obs;
+    _menuPtr = store.menus.first.obs;
     isLoading(false);
   }
 
@@ -37,32 +45,47 @@ class MainController extends GetxController {
   List<Table> get tables => _store.value.tables;
 
   /// Add and persist a new product based on the user's inputs.
-  Future<void> addToTables(Table? t) async {
-    if (t == null) return;
+  void addNTables(int n) {
+    if (n <= 0) return;
 
-    // Store the new Item in memory
-    _store.update((val) {
-      val?.tables.add(t);
+    // Update observable
+    _store.update((val) async {
+      isLoading(true);
+      for (int i = 0; i < n; i++) {
+        // Create data in database
+        var response = await _api.addTable();
+        Table table = Table.fromJson(response);
+
+        // Save data in memory
+        val?.tables.add(table);
+      }
+      isLoading(false);
     });
-    // Persist the changes to a database
-    await _api.add(t);
   }
 
-  /// Delete an existing table completely.
-  Future<void> deleteFromTables(Table? t) async {
-    if (t == null) return;
+  /// Add and persist a new product based on the user's inputs.
+  void deleteNTables(int n) {
+    if (n <= 0) return;
 
-    // Remove Item from memory
-    _store.update((val) {
-      val?.tables.remove(t);
+    var rTables = List.from(tables.where((t) => t.number > tables.length - n));
+
+    // Update observable
+    _store.update((val) async {
+      isLoading(true);
+      for (var table in rTables) {
+        // Delete data from database
+        await _api.deleteTable(table.id);
+
+        // Remove data from memory
+        val?.tables.remove(table);
+      }
+      isLoading(false);
     });
-    // Persist the changes to a database
-    await _api.delete(t);
   }
 
   //? ####################### MENU FEATURE #######################
   // Allow Widgets to read the root menus.
-  List<Menu> get rootMenus => _store.value.menu.items.cast<Menu>();
+  List<Menu> get rootMenus => _store.value.menus;
 
   // Allow Widgets to read the current menu.
   Menu get menu => _menuPtr.value;
@@ -76,31 +99,44 @@ class MainController extends GetxController {
   }
 
   /// Add and persist a new product based on the user's inputs.
-  Future<void> addToMenu(MenuItem? item) async {
-    if (item == null) return;
+  void addToMenu(Map<String, dynamic> data) {
+    if (data.isEmpty) return;
 
-    // Store the new Item in memory
-    _menuPtr.update((val) {
-      item.setParent(menu);
-      val?.items.add(item);
+    // Update observable
+    _store.update((_) async {
+      isLoading(true);
+
+      // Create data in database
+      var response = await _api.addToMenu(data, menu.path);
+      MenuItem item = MenuItem.fromJson(response);
+
+      // Save data in memory
+      _menuPtr.update((val) {
+        item.parent = val;
+        val?.items.add(item);
+      });
+
+      isLoading(false);
     });
-
-    // Persist the changes to a database
-    await _api.add(item);
   }
 
   /// Delete an existing product or menu completely.
   Future<void> deleteFromMenu(MenuItem? item) async {
-    if (item == null || [item, item.parent].contains(_store.value.menu)) {
-      return;
-    }
+    if (item == null || rootMenus.contains(item)) return;
 
-    // Remove Item from memory
-    _menuPtr.update((val) {
-      val?.items.remove(item);
+    // Update observable
+    _store.update((_) async {
+      isLoading(true);
+
+      // Delete data from database
+      await _api.deleteFromMenu(item.path);
+
+      // Remove data from memory
+      _menuPtr.update((val) {
+        val?.items.remove(item);
+      });
+
+      isLoading(false);
     });
-
-    // Persist the changes to a database
-    await _api.delete(item);
   }
 }
