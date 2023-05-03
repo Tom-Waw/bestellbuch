@@ -39,9 +39,9 @@ class _MenuFormState extends State<MenuForm> {
             child: ElevatedButton(
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
-                  MainController.to.addToMenu(
-                    Menu(name: _nameController.text, items: []),
-                  );
+                  // MainController.to.addToMenu(
+                  //   Menu(name: _nameController.text, items: []),
+                  // );
                   Get.back();
                 }
               },

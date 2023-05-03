@@ -9,8 +9,7 @@ class MenuTabBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(() => Row(
-          children: (MainController.to.rootMenus
-                ..sort((a, b) => a.name.compareTo(b.name)))
+          children: MainController.to.rootMenus
               .map((menu) => Expanded(
                     child: Container(
                       decoration: BoxDecoration(

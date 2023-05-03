@@ -1,49 +1,59 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../data/menu.dart';
-import '../data/store.dart';
-import '../data/table.dart';
-
 class APIService {
-  final tableRef = FirebaseFirestore.instance
-      .collection("Tables")
-      .withConverter<Table>(
-          fromFirestore: Table.fromFirestore,
-          toFirestore: (table, _) => table.toFirestore());
-
+  final tableRef = FirebaseFirestore.instance.collection("Tables");
   final menuRef = FirebaseFirestore.instance
       .collection("Menu")
       .where("name", isEqualTo: "root");
 
-  Future<Store> fetchData() async {
+  Future<Map<String, dynamic>> fetchData() async {
     var menus = await _loadMenu(await menuRef.get());
-    var tables = await tableRef.get();
+    var tables = _loadTables(await tableRef.orderBy("number").get());
 
-    return Store(
-      menus.cast<Menu>().first.items.cast<Menu>(),
-      tables.docs.map((t) => t.data()).toList(),
-    );
+    return {
+      "menus": menus.first["items"],
+      "tables": tables,
+    };
   }
 
-  Future<List<MenuItem>> _loadMenu(QuerySnapshot<Map<String, dynamic>> ref) =>
+  Future<List<Map<String, dynamic>>> _loadMenu(
+          QuerySnapshot<Map<String, dynamic>> ref) =>
       Future.wait(ref.docs.map((menu) async {
-        Map<String, dynamic> data = menu.data();
+        var data = menu.data();
+        data["id"] = menu.id;
 
-        if (data.containsKey("price")) return Product.fromJson(data);
+        if (data.containsKey("price")) return data;
 
-        var innerRef = await menu.reference.collection("items").get();
+        var innerRef =
+            await menu.reference.collection("items").orderBy("name").get();
         data["items"] = await _loadMenu(innerRef);
 
-        return Menu.fromJson(data);
+        return data;
       }));
 
-  Future<void> addToMenu(MenuItem? item) async {
-    if (item is Product) {
-      //item.name
-      //item.price
-      //item.parent
-    }
+  List<Map<String, dynamic>> _loadTables(
+          QuerySnapshot<Map<String, dynamic>> ref) =>
+      ref.docs.map((table) {
+        var data = table.data();
+        data["id"] = table.id;
 
-    if (item is Menu) {}
+        return data;
+      }).toList();
+
+  Future<Map<String, dynamic>> addTable() async {
+    int tablesCount = (await tableRef.count().get()).count;
+    var ref = await tableRef.add({
+      "number": tablesCount + 1,
+    });
+
+    var data = (await ref.get()).data()!;
+    data["id"] = ref.id;
+    return data;
+  }
+
+  Future<void> deleteTable(String id) async {
+    await tableRef.doc(id).delete();
   }
 }

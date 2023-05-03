@@ -21,6 +21,8 @@ dependencies:
 
   cupertino_icons: ^1.0.2
   drag_and_drop_gridview: ^1.0.8
+  font_awesome_flutter: ^10.4.0
+  numberpicker: ^2.1.2
 
 dev_dependencies:
   flutter_test:

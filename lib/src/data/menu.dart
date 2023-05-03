@@ -1,46 +1,38 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-
 abstract class MenuItem {
-  Menu? _parent;
+  final String id;
   final String name;
 
-  MenuItem({required this.name});
+  Menu? parent;
 
-  Menu get parent => _parent!;
-  void setParent(Menu parent) {
-    _parent = parent;
-  }
+  MenuItem({required this.id, required this.name});
+
+  factory MenuItem.fromJson(Map<String, dynamic> json) =>
+      json.containsKey("price") ? Product.fromJson(json) : Menu.fromJson(json);
 }
 
 class Menu extends MenuItem {
   final List<MenuItem> items;
 
-  Menu({required super.name, required this.items}) {
+  Menu({required super.id, required super.name, required this.items}) {
     for (MenuItem item in items) {
-      item._parent = this;
+      item.parent = this;
     }
   }
 
   Menu? getRoot() {
-    if (_parent == null) return null;
-    if (_parent?._parent == null) return this;
-    return _parent?.getRoot();
+    if (parent == null) return null;
+    if (parent?.parent == null) return this;
+    return parent?.getRoot();
   }
 
-  factory Menu.fromJson(Map<String, dynamic> json) {
-    Menu menu = Menu(
-      name: json["name"],
-      items: json["items"],
-    );
-
-    for (var item in menu.items) {
-      item.setParent(menu);
-    }
-    return menu;
-  }
+  factory Menu.fromJson(Map<String, dynamic> json) => Menu(
+        id: json["id"],
+        name: json["name"],
+        items: json["items"].map(MenuItem.fromJson).cast<MenuItem>().toList(),
+      );
 
   Map<String, dynamic> toJson() => {
+        "id": id,
         "name": name,
         "items": items,
       };
@@ -49,14 +41,16 @@ class Menu extends MenuItem {
 class Product extends MenuItem {
   final double price;
 
-  Product({required super.name, required this.price});
+  Product({required super.id, required super.name, required this.price});
 
   factory Product.fromJson(Map<String, dynamic> json) => Product(
+        id: json["id"],
         name: json["name"],
         price: json["price"],
       );
 
   Map<String, dynamic> toJson() => {
+        "id": id,
         "name": name,
         "price": price,
       };

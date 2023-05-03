@@ -58,10 +58,10 @@ class _ProductFormState extends State<ProductForm> {
             child: ElevatedButton(
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
-                  MainController.to.addToMenu(Product(
-                    name: _nameController.text,
-                    price: double.parse(_priceController.text),
-                  ));
+                  // MainController.to.addToMenu(Product(
+                  //   name: _nameController.text,
+                  //   price: double.parse(_priceController.text),
+                  // ));
                   Get.back();
                 }
               },

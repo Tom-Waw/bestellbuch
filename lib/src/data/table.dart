@@ -1,21 +1,16 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class Table {
+  String id;
   final int number;
 
-  const Table({required this.number});
+  Table({required this.id, required this.number});
 
-  String get name => "Tisch $number";
+  factory Table.fromJson(Map<String, dynamic> json) => Table(
+        id: json["id"],
+        number: json["number"],
+      );
 
-  factory Table.fromFirestore(
-    DocumentSnapshot<Map<String, dynamic>> snapshot,
-    SnapshotOptions? options,
-  ) =>
-      Table(number: snapshot.data()!['number']);
-
-  Map<String, dynamic> toFirestore() {
-    return {
-      "number": number,
-    };
-  }
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "number": number,
+      };
 }

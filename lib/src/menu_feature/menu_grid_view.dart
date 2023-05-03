@@ -14,8 +14,7 @@ class MenuGridView extends StatelessWidget {
           crossAxisCount: 3,
           crossAxisSpacing: 8.0,
           mainAxisSpacing: 8.0,
-          children: (MainController.to.menu.items
-                ..sort((a, b) => a.name.compareTo(b.name)))
+          children: MainController.to.menu.items
               .map((item) => MenuItemBox(item: item))
               .toList(),
         ));
