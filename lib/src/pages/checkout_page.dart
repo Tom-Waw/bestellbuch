@@ -1,89 +1,83 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Table;
 import 'package:get/get.dart';
 
+import '../data/table.dart';
+import '../management/main_controller.dart';
 import '../routes/routes.dart';
 
 class CheckoutPage extends StatelessWidget {
-  final List<Map<String, dynamic>> data = [
-    {'title': 'Ki-Schni', 'price': 15, 'qty': 2},
-    {'title': 'Shisha Schoko Zitrone', 'price': 5, 'qty': 5},
-    {'title': 'Glas Gerstensaft', 'price': 20, 'qty': 1},
-    {'title': 'Pommes rot weiss', 'price': 20, 'qty': 5},
-    {'title': 'Maggi', 'price': 10, 'qty': 5},
-  ];
-
-  final f = NumberFormat("\$###,###.00", "en_US");
-
-  const CheckoutPage({super.key});
+  CheckoutPage({super.key, required Table table}) {
+    MainController.to.openTable(table);
+  }
 
   @override
   Widget build(BuildContext context) {
-    int _total = 0;
-    _total = data.map((e) => e['price'] * e['qty']).reduce(
-          (value, element) => value + element,
-        );
-
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Flutter - Thermal Printer'),
-        backgroundColor: Colors.redAccent,
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: data.length,
-              itemBuilder: (c, i) {
-                return ListTile(
-                  title: Text(
-                    data[i]['title'].toString(),
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  subtitle: Text(
-                    "${f.format(data[i]['price'])} x ${data[i]['qty']}",
-                  ),
-                  trailing: Text(
-                    f.format(
-                      data[i]['price'] * data[i]['qty'],
-                    ),
-                  ),
-                );
-              },
+    return Obx(() => MainController.to.isLoading.value
+        ? Scaffold(
+            appBar: AppBar(title: const Text("Bestellung")),
+            body: const Center(child: CircularProgressIndicator()),
+          )
+        : Scaffold(
+            appBar: AppBar(
+              title: Text(MainController.to.order!.table.name),
+              backgroundColor: Colors.redAccent,
             ),
-          ),
-          Container(
-            color: Colors.grey[200],
-            padding: const EdgeInsets.all(20),
-            child: Row(
+            body: Column(
               children: [
-                Text(
-                  "Total: ${f.format(_total)}",
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(width: 80),
                 Expanded(
-                  child: TextButton.icon(
-                    onPressed: () {
-                      Get.toNamed(Routes.print);
+                  child: ListView.builder(
+                    itemCount: MainController.to.order!.items.length,
+                    itemBuilder: (_, index) {
+                      return ListTile(
+                        title: Text(
+                          MainController.to.order!.items.keys
+                              .elementAt(index)
+                              .name,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        subtitle: Text(""
+                            "${MainController.to.order!.items.values.elementAt(index)} x "
+                            "${MainController.to.order!.items.keys.elementAt(index).price}"),
+                        trailing: Text(
+                          "€ ${MainController.to.order!.items.keys.elementAt(index).price * MainController.to.order!.items.values.elementAt(index)}",
+                        ),
+                      );
                     },
-                    icon: const Icon(Icons.print),
-                    label: const Text('Print'),
-                    style: TextButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      backgroundColor: Colors.green,
-                    ),
                   ),
                 ),
+                Container(
+                  color: Colors.grey[200],
+                  padding: const EdgeInsets.all(20),
+                  child: Row(
+                    children: [
+                      Text(
+                        "Total: ${MainController.to.order!.total}",
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(width: 80),
+                      Expanded(
+                        child: TextButton.icon(
+                          onPressed: () {
+                            Get.toNamed(Routes.print);
+                          },
+                          icon: const Icon(Icons.print),
+                          label: const Text('Print'),
+                          style: TextButton.styleFrom(
+                            foregroundColor: Colors.white,
+                            backgroundColor: Colors.green,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
               ],
             ),
-          )
-        ],
-      ),
-    );
+          ));
   }
 }

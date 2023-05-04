@@ -1,9 +1,9 @@
 import 'package:get/get.dart';
 
-import '../pages/checkout_page.dart';
+// import '../pages/checkout_page.dart';
 import '../pages/home_page.dart';
 import '../pages/menu_page.dart';
-import '../pages/print_page.dart';
+// import '../pages/print_page.dart';
 import '../pages/tables_page.dart';
 
 class Routes {
@@ -27,12 +27,8 @@ final getPages = [
     name: Routes.tables,
     page: () => const TablesPage(),
   ),
-  GetPage(
-    name: Routes.checkout,
-    page: () => CheckoutPage(),
-  ),
-  GetPage(
-    name: Routes.print,
-    page: () => PrintPage(),
-  ),
+  // GetPage(
+  //   name: Routes.print,
+  //   page: () => PrintPage(),
+  // ),
 ];

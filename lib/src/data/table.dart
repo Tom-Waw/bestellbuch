@@ -4,6 +4,8 @@ class Table {
 
   Table({required this.id, required this.number});
 
+  String get name => "Table $number";
+
   factory Table.fromJson(Map<String, dynamic> json) => Table(
         id: json["id"],
         number: json["number"],

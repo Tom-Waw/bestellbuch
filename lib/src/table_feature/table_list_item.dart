@@ -13,7 +13,7 @@ class TableListItem extends StatelessWidget {
       child: ListTile(
         contentPadding: const EdgeInsets.all(14.0),
         title: Text(
-          "Tisch ${table.number}",
+          table.name,
           style: const TextStyle(fontSize: 18.0),
         ),
       ),

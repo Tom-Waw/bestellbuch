@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:get/get.dart';
 
 import 'api_service.dart';
@@ -14,7 +12,8 @@ class MainController extends GetxController {
 
   late final APIService _api;
   late final Rx<Store> _store;
-  late final Rx<Table?> _tablePtr = null.obs;
+  final Rx<Order?> _order = null.obs;
+
   late Rx<Menu> _menuPtr;
 
   MainController(this._api);
@@ -143,25 +142,24 @@ class MainController extends GetxController {
   }
 
 //? ####################### ORDER FEATURE #######################
-// Allow Widgets to read the orders.
-  Map<Table, Order> get orders => _store.value.orders;
-
-  Order? get order => _store.value.orders[_tablePtr.value != null];
+// Allow Widgets to read the current order.
+  Order? get order => _order.value;
 
   void openTable(Table table) {
-    _tablePtr(table);
+    // TODO: check if table is already open
+
+    _order(Order(table: table));
   }
 
   void closeTable() {
-    _tablePtr(null);
+    // TODO: save order to database
+
+    _order(null);
   }
 
-  /// Load the order data from the APIService.
-  Future<void> loadOrder() async {
-    isLoading(true);
-    // Store data = await _api.fetchData();
-    // _store = data.obs;
-    // _menuPtr = (data.menu.items.first as Menu).obs;
-    isLoading(false);
+  void closeOrder() {
+    // TODO: print receipt
+
+    closeTable();
   }
 }
