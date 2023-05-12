@@ -7,7 +7,7 @@ publish_to: "none"
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.19.4 <3.0.0"
+  sdk: ">=2.19.3 <3.0.0" # dart
 
 dependencies:
   flutter:
@@ -20,8 +20,8 @@ dependencies:
   firebase_core: ^2.10.0
 
   cupertino_icons: ^1.0.2
-  drag_and_drop_gridview: ^1.0.8
   font_awesome_flutter: ^10.4.0
+  flutter_slidable: ^3.0.0
   numberpicker: ^2.1.2
 
 dev_dependencies:

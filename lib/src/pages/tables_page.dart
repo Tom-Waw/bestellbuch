@@ -2,7 +2,7 @@ import 'package:bestellbuch/src/table_feature/table_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../management/main_controller.dart';
+import '../management/table_controller.dart';
 import '../table_feature/table_list_item.dart';
 
 class TablesPage extends StatelessWidget {
@@ -12,12 +12,10 @@ class TablesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(() => Scaffold(
         appBar: TableAppBar(),
-        body: MainController.to.isLoading.value
-            ? const Center(child: CircularProgressIndicator())
-            : ListView.builder(
-                itemCount: MainController.to.tables.length,
-                itemBuilder: (_, idx) =>
-                    TableListItem(table: MainController.to.tables[idx]),
-              )));
+        body: ListView.builder(
+          itemCount: TableController.to.tables.length,
+          itemBuilder: (_, idx) =>
+              TableListItem(table: TableController.to.tables[idx]),
+        )));
   }
 }

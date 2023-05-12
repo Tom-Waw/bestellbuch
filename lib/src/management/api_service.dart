@@ -1,8 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
 
-class APIService {
-  final tableRef = FirebaseFirestore.instance.collection("Tables");
+class APIService extends GetxService {
+  static APIService get to => Get.find<APIService>();
+
   final menuRef = FirebaseFirestore.instance.collection("Menu");
+  final tableRef = FirebaseFirestore.instance.collection("Tables");
+  final orderRef = FirebaseFirestore.instance.collection("Orders");
 
   Future<Map<String, dynamic>> fetchData() async {
     var menus = await _loadMenu(await menuRef.orderBy("name").get());
@@ -65,4 +69,32 @@ class APIService {
   Future<void> deleteFromMenu(String path) async {
     await menuRef.doc(path).delete();
   }
+
+  Future<Map<String, dynamic>> getOrCreateOrder(String tableId) async {
+    var ref = await orderRef
+        .where("table", isEqualTo: tableId)
+        .where("active", isEqualTo: true)
+        .get();
+
+    if (ref.docs.isEmpty) {
+      var ref = await orderRef.add({
+        "table": tableId,
+        "active": true,
+        "items": [],
+      });
+
+      var data = (await ref.get()).data()!;
+      data["id"] = ref.id;
+      return data;
+    }
+
+    var data = ref.docs.first.data();
+    data["id"] = ref.docs.first.id;
+    return data;
+  }
+
+  Future<void> saveOrder(Map<String, dynamic> data) async =>
+      await orderRef.doc(data["id"]).set(data);
+
+  Future<void> deleteOrder(String id) async => await orderRef.doc(id).delete();
 }

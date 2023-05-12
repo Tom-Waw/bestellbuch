@@ -1,4 +1,6 @@
+import 'package:bestellbuch/src/routes/routes.dart';
 import 'package:flutter/material.dart' hide Table;
+import 'package:get/get.dart';
 
 import '../data/table.dart';
 
@@ -13,8 +15,12 @@ class TableListItem extends StatelessWidget {
       child: ListTile(
         contentPadding: const EdgeInsets.all(14.0),
         title: Text(
-          "Tisch ${table.number}",
+          table.name,
           style: const TextStyle(fontSize: 18.0),
+        ),
+        onTap: () => Get.toNamed(
+          Routes.checkout,
+          arguments: table,
         ),
       ),
     );

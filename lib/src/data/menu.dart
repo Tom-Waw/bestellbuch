@@ -22,6 +22,12 @@ class Menu extends MenuItem {
   }
 
   bool get isRoot => parent?.parent == null;
+  List<Product> get allProducts =>
+      items.whereType<Product>().toList(growable: false) +
+      items
+          .whereType<Menu>()
+          .expand((menu) => menu.allProducts)
+          .toList(growable: false);
 
   Menu? getRoot() {
     if (parent == null) return null;
