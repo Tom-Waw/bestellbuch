@@ -1,10 +1,10 @@
 class Table {
-  String id;
+  final String id;
   final int number;
 
   Table({required this.id, required this.number});
 
-  String get name => "Table $number";
+  String get name => "Tisch $number";
 
   factory Table.fromJson(Map<String, dynamic> json) => Table(
         id: json["id"],

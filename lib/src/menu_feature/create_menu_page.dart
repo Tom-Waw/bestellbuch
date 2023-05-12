@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide MenuController;
 import 'package:get/get.dart';
 
-import '../management/main_controller.dart';
+import '../management/menu_controller.dart';
 
 class CreateMenuPage extends StatefulWidget {
   const CreateMenuPage({super.key});
@@ -39,9 +39,9 @@ class _CreateMenuPageState extends State<CreateMenuPage> {
                 ),
                 const SizedBox(height: 25.0),
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      MainController.to.addToMenu({
+                      await MenuController.to.addItem({
                         "name": _nameController.text,
                       });
                       Get.back();

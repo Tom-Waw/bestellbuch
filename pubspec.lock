@@ -17,14 +17,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.10.0"
-  bluetooth_print:
-    dependency: "direct main"
-    description:
-      name: bluetooth_print
-      sha256: b391cd7b22b772e07dfddb4e065ecbed5f0e8dd777ce726e1ea56492c8d3ecc8
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.3.0"
   boolean_selector:
     dependency: transitive
     description:
@@ -89,14 +81,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.5"
-  drag_and_drop_gridview:
-    dependency: "direct main"
-    description:
-      name: drag_and_drop_gridview
-      sha256: "41186c42a2c8595009c1d2de50ed98a88a8e33ff1076d58d07e95487354af06c"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.8"
   fake_async:
     dependency: transitive
     description:
@@ -142,6 +126,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.1"
+  flutter_slidable:
+    dependency: "direct main"
+    description:
+      name: flutter_slidable
+      sha256: cc4231579e3eae41ae166660df717f4bad1359c87f4a4322ad8ba1befeb3d2be
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -200,14 +192,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.5"
-  json_annotation:
-    dependency: transitive
-    description:
-      name: json_annotation
-      sha256: b10a7b2ff83d83c777edba3c6a0f97045ddadd56c944e1a23a3fdf43a1bf4467
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.8.1"
   lints:
     dependency: transitive
     description:
@@ -264,14 +248,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
-  rxdart:
-    dependency: transitive
-    description:
-      name: rxdart
-      sha256: "0c7c0cedd93788d996e33041ffecda924cc54389199cde4e6a34b440f50044cb"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.27.7"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -343,4 +319,4 @@ packages:
     version: "2.1.4"
 sdks:
   dart: ">=2.19.3 <3.0.0"
-  flutter: ">=1.20.0"
+  flutter: ">=3.7.0"
