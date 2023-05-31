@@ -27,9 +27,8 @@ class App extends StatelessWidget {
       navigatorKey: GlobalKey(debugLabel: "app"),
       theme: ThemeData(),
       getPages: getPages,
-      initialRoute: Routes.home,
+      initialRoute: Routes.login,
       initialBinding: MainBinding(),
-
     );
   }
 }

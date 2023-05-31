@@ -7,8 +7,9 @@ import '../management/order_controller.dart';
 
 class MenuItemBox extends StatelessWidget {
   final MenuItem item;
+  final bool enabled;
 
-  const MenuItemBox({super.key, required this.item});
+  const MenuItemBox({super.key, required this.item, this.enabled = true});
 
   @override
   Widget build(BuildContext context) {
@@ -17,25 +18,15 @@ class MenuItemBox extends StatelessWidget {
         color: Colors.blue,
       ),
       child: InkWell(
-        onTap: () {
-          if (item is Menu) {
-            MenuController.to.openMenu(item as Menu);
-          } else if (Get.isRegistered<OrderController>()) {
-            Get.back(result: item as Product);
-          }
-        },
-        onLongPress: () => Get.defaultDialog(
-          title: "Willst du dieses Element wirklich löschen?",
-          titlePadding: const EdgeInsets.fromLTRB(25.0, 25.0, 25.0, 0.0),
-          content: const SizedBox(height: 0.0),
-          contentPadding: const EdgeInsets.only(bottom: 20.0),
-          onConfirm: () {
-            MenuController.to.deleteFromMenu(item);
-            Get.back();
-          },
-          buttonColor: Colors.red,
-          confirmTextColor: Colors.white,
-        ),
+        onTap: enabled
+            ? () {
+                if (item is Menu) {
+                  MenuController.to.openMenu(item as Menu);
+                } else if (Get.isRegistered<OrderController>()) {
+                  Get.back(result: item as Product);
+                }
+              }
+            : null,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
