@@ -4,6 +4,7 @@ import '../management/menu_controller.dart';
 import '../management/order_controller.dart';
 import '../management/table_controller.dart';
 
+import '../pages/auth_page.dart';
 import '../pages/checkout_page.dart';
 import '../pages/home_page.dart';
 import '../pages/menu_page.dart';
@@ -11,6 +12,7 @@ import '../pages/menu_page.dart';
 import '../pages/tables_page.dart';
 
 class Routes {
+  static String login = '/login';
   static String home = '/home';
   static String menu = '/menu';
   static String tables = '/tables';
@@ -19,6 +21,10 @@ class Routes {
 }
 
 final getPages = [
+  GetPage(
+    name: Routes.login,
+    page: () => const AuthPage(),
+  ),
   GetPage(
     name: Routes.home,
     page: () => const HomePage(),

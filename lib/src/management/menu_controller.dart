@@ -8,6 +8,7 @@ import '../data/menu.dart';
 class MenuController extends GetxController {
   final List<Menu> menus = StateService.to.menus;
   late final Rx<Menu> _current;
+  Rx<bool> isEditing = false.obs;
 
   MenuController();
 
@@ -24,6 +25,8 @@ class MenuController extends GetxController {
     StateService.to.syncState();
     super.onClose();
   }
+
+  void toggleEdit() => isEditing.toggle();
 
   // Allow Widgets to read the current menu.
   Menu get menu => _current.value;
