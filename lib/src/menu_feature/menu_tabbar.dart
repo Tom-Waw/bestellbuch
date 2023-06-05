@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart' hide MenuController;
+import 'package:get/get.dart';
 
-import '../management/menu_controller.dart';
+import '../routes.dart';
+import 'menu_controller.dart';
 
 class MenuTabBar extends StatelessWidget implements PreferredSizeWidget {
   const MenuTabBar({super.key});
@@ -25,7 +27,7 @@ class MenuTabBar extends StatelessWidget implements PreferredSizeWidget {
                     ),
                   ),
                   child: InkWell(
-                    onTap: () => MenuController.to.openMenu(menu),
+                    onTap: () => Get.offNamed(Routes.menu, arguments: menu),
                     child: Ink(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: Center(

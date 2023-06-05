@@ -4,16 +4,16 @@ import 'package:get/get.dart';
 import 'package:numberpicker/numberpicker.dart';
 
 import '../auth/auth_service.dart';
-import '../management/table_controller.dart';
+import 'tables_controller.dart';
 
-class TableAppBar extends AppBar {
-  TableAppBar({super.key});
+class TablesAppBar extends AppBar {
+  TablesAppBar({super.key});
 
   @override
-  State<TableAppBar> createState() => _TableAppBarState();
+  State<TablesAppBar> createState() => _TableAppBarState();
 }
 
-class _TableAppBarState extends State<TableAppBar> {
+class _TableAppBarState extends State<TablesAppBar> {
   int _pickerValue = 0;
 
   @override
@@ -21,7 +21,7 @@ class _TableAppBarState extends State<TableAppBar> {
     return AppBar(
       title: const Text("Tischplan"),
       actions: [
-        if (AuthService.to.isAdmin.value)
+        if (AuthService.to.isAdmin)
           IconButton(
             icon: const Icon(FontAwesomeIcons.plusMinus),
             onPressed: () => Get.defaultDialog(
@@ -38,14 +38,14 @@ class _TableAppBarState extends State<TableAppBar> {
               actions: [
                 TextButton(
                   onPressed: () async {
-                    await TableController.to.addNTables(_pickerValue);
+                    await TablesController.to.addNTables(_pickerValue);
                     Get.back();
                   },
                   child: const Text("Hinzufügen"),
                 ),
                 TextButton(
                   onPressed: () async {
-                    await TableController.to.deleteNTables(_pickerValue);
+                    await TablesController.to.deleteNTables(_pickerValue);
                     Get.back();
                   },
                   child: const Text("Löschen"),

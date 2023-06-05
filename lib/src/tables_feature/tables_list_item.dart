@@ -1,13 +1,13 @@
-import 'package:bestellbuch/src/routes/routes.dart';
+import 'package:bestellbuch/src/routes.dart';
 import 'package:flutter/material.dart' hide Table;
 import 'package:get/get.dart';
 
-import '../data/table.dart';
+import 'table.dart';
 
-class TableListItem extends StatelessWidget {
+class TablesListItem extends StatelessWidget {
   final Table table;
 
-  const TableListItem({super.key, required this.table});
+  const TablesListItem({super.key, required this.table});
 
   @override
   Widget build(BuildContext context) {

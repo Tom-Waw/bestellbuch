@@ -1,15 +1,23 @@
-import '../management/state_service.dart';
-import 'menu.dart';
-import 'table.dart';
+import '../employees_feature/employee.dart';
+import '../menu_feature/menu.dart';
+import '../menu_feature/menu_controller.dart';
+import '../tables_feature/table.dart';
+import '../tables_feature/tables_controller.dart';
 
 class Order {
   final String id;
   final Table table;
+  final Employee waiter;
   bool active;
   final Map<Product, int> items;
 
-  Order({required this.id, required this.table, this.active = true, items})
-      : items = items ?? {};
+  Order({
+    required this.id,
+    required this.table,
+    required this.waiter,
+    this.active = true,
+    items,
+  }) : items = items ?? {};
 
   double get total => items.isNotEmpty
       ? items.entries
@@ -17,13 +25,15 @@ class Order {
           .reduce((value, element) => value + element)
       : 0;
 
-  factory Order.fromJson(Map<String, dynamic> json) => Order(
-        id: json["id"],
-        table: StateService.to.tables.firstWhere((t) => t.id == json["table"]),
+  factory Order.fromJson(String id, Map<String, dynamic> json) => Order(
+        id: id,
+        table: TablesController.to.tables
+            .firstWhere((t) => t.number == json["table"]),
+        waiter: json["waiter"],
         active: json["active"],
         items: <Product, int>{
           for (var item in json["items"])
-            StateService.to.menus
+            MenuController.to.menus
                     .expand((menu) => menu.allProducts)
                     .firstWhere((product) => product.id == item["product"]):
                 item["count"]
@@ -31,14 +41,14 @@ class Order {
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id,
-        "table": table.id,
+        "table": table.number,
+        "waiter": waiter,
         "active": active,
         "items": [
           for (var entry in items.entries)
             {
-              "product": entry.key.id,
               "count": entry.value,
+              "product": entry.key.id,
             }
         ],
       };

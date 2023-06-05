@@ -1,18 +1,18 @@
-import 'package:bestellbuch/src/data/menu.dart';
+import 'package:bestellbuch/src/menu_feature/menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 
-import '../data/order.dart';
-import '../management/order_controller.dart';
-import '../routes/routes.dart';
+import 'order.dart';
+import 'order_controller.dart';
+import '../routes.dart';
 
 class CheckoutPage extends StatelessWidget {
   const CheckoutPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() => OrderController.to.isLoading.value
+    return Obx(() => !OrderController.to.isReady
         ? Scaffold(
             appBar: AppBar(title: const Text("Bestellung")),
             body: const CircularProgressIndicator(),

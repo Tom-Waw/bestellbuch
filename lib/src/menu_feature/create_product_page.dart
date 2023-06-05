@@ -2,7 +2,7 @@ import 'package:flutter/material.dart' hide MenuController;
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-import '../management/menu_controller.dart';
+import 'menu_controller.dart';
 
 class CreateProductPage extends StatefulWidget {
   const CreateProductPage({super.key});

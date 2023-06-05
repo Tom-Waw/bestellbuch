@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'firebase_options.dart';
-import 'src/management/main_binding.dart';
-import 'src/routes/routes.dart';
+import 'src/auth/auth_service.dart';
+import 'src/routes.dart';
 
 void main() async {
   // Initialize Firestore
@@ -28,7 +28,7 @@ class App extends StatelessWidget {
       theme: ThemeData(),
       getPages: getPages,
       initialRoute: Routes.login,
-      initialBinding: MainBinding(),
+      initialBinding: BindingsBuilder.put(() => AuthService(), permanent: true),
     );
   }
 }

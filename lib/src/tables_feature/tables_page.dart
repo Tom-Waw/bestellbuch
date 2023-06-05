@@ -1,9 +1,9 @@
-import 'package:bestellbuch/src/table_feature/table_app_bar.dart';
+import 'package:bestellbuch/src/tables_feature/tables_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../management/table_controller.dart';
-import '../table_feature/table_list_item.dart';
+import 'tables_controller.dart';
+import 'tables_list_item.dart';
 
 class TablesPage extends StatelessWidget {
   const TablesPage({super.key});
@@ -11,11 +11,11 @@ class TablesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(() => Scaffold(
-        appBar: TableAppBar(),
+        appBar: TablesAppBar(),
         body: ListView.builder(
-          itemCount: TableController.to.tables.length,
+          itemCount: TablesController.to.tables.length,
           itemBuilder: (_, idx) =>
-              TableListItem(table: TableController.to.tables[idx]),
+              TablesListItem(table: TablesController.to.tables[idx]),
         )));
   }
 }

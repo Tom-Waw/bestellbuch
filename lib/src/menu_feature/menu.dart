@@ -6,7 +6,7 @@ abstract class MenuItem {
 
   MenuItem({required this.id, required this.name});
 
-  String get path => parent != null ? "${parent?.path}/items/$id" : id;
+  String get path => parent == null ? id : "${parent!.path}/items/$id";
 
   factory MenuItem.fromJson(Map<String, dynamic> json) =>
       json.containsKey("price") ? Product.fromJson(json) : Menu.fromJson(json);
