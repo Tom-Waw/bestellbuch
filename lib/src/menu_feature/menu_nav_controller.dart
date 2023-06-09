@@ -23,6 +23,7 @@ class MenuNavController extends GetxController
     controller.addListener(() {
       if (controller.indexIsChanging) open(_menus[controller.index]);
     });
+    _menus.listen((_) { });
   }
 
   @override

@@ -49,7 +49,7 @@ class MenuItemBox extends StatelessWidget {
         ? ShakeWidget(
             duration: const Duration(milliseconds: 2500),
             autoPlay: true,
-            shakeConstant: ShakeLittleConstant1(),
+            shakeConstant: ShakeRotateConstant2(),
             child: InkWell(
               onTap: () => Get.defaultDialog(
                 title: "Willst du dieses Element wirklich löschen?",

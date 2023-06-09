@@ -3,7 +3,7 @@ class TableGroup {
   late final List<Table> tables;
 
   TableGroup({required this.id, required number}) {
-    tables = List<Table>.generate(number, (index) => Table(number: index));
+    tables = List<Table>.generate(number, (index) => Table(number: index + 1));
   }
 
   factory TableGroup.fromJson(String id, Map<String, dynamic> json) =>

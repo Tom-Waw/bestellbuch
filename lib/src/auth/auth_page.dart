@@ -30,6 +30,7 @@ class _AuthPageState extends State<AuthPage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               TextFormField(
+                autofocus: true,
                 controller: _nameController,
                 decoration: const InputDecoration(
                     label: Text("Name"),

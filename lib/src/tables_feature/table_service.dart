@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 
@@ -10,7 +12,8 @@ class TableService extends GetxService {
   static TableService get to => Get.find<TableService>();
 
   final RxList<TableGroup> _tableGroups = <TableGroup>[].obs;
-  List<Table> get tables => _tableGroups.first.tables;
+  List<Table> get tables =>
+      _tableGroups.isNotEmpty ? _tableGroups.first.tables : [];
 
   @override
   void onInit() async {
@@ -18,8 +21,10 @@ class TableService extends GetxService {
     _tableGroups.bindStream(_dbStream());
   }
 
-  Stream<List<TableGroup>> _dbStream() => _ref.snapshots().map((snapshot) =>
-      snapshot.docs.map((doc) => TableGroup.fromJson(doc.id, doc.data())).toList());
+  Stream<List<TableGroup>> _dbStream() =>
+      _ref.snapshots().map((snapshot) => snapshot.docs
+          .map((doc) => TableGroup.fromJson(doc.id, doc.data()))
+          .toList());
 
   /// Add and persist n new tables.
   Future<void> addNTables(int n) async {
@@ -32,6 +37,6 @@ class TableService extends GetxService {
   Future<void> deleteNTables(int n) async {
     if (n <= 0) return;
 
-    _ref.doc("default").update({"number": tables.length - n});
+    _ref.doc("default").update({"number": max(tables.length - n, 0)});
   }
 }
