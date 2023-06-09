@@ -2,7 +2,7 @@ import 'package:flutter/material.dart' hide MenuController;
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-import 'menu_controller.dart';
+import 'menu_service.dart';
 
 class CreateProductPage extends StatefulWidget {
   const CreateProductPage({super.key});
@@ -62,7 +62,7 @@ class _CreateProductPageState extends State<CreateProductPage> {
               ElevatedButton(
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    await MenuController.to.addItem({
+                    await MenuService.to.addItem({
                       "name": _nameController.text,
                       "price": double.parse(_priceController.text),
                     });

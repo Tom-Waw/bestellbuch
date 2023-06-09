@@ -4,10 +4,10 @@ import 'package:get/get.dart';
 import 'table.dart';
 
 /// A class to read and update the tables.
-class TablesController extends GetxController {
+class TableService extends GetxService {
   final _ref = FirebaseFirestore.instance.collection("Tables");
 
-  static TablesController get to => Get.find<TablesController>();
+  static TableService get to => Get.find<TableService>();
 
   final RxList<TableGroup> _tableGroups = <TableGroup>[].obs;
   List<Table> get tables => _tableGroups.first.tables;
@@ -19,7 +19,7 @@ class TablesController extends GetxController {
   }
 
   Stream<List<TableGroup>> _dbStream() => _ref.snapshots().map((snapshot) =>
-      snapshot.docs.map((doc) => TableGroup.fromJson(doc.data())).toList());
+      snapshot.docs.map((doc) => TableGroup.fromJson(doc.id, doc.data())).toList());
 
   /// Add and persist n new tables.
   Future<void> addNTables(int n) async {

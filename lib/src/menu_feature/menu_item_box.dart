@@ -2,9 +2,9 @@ import 'package:flutter/material.dart' hide MenuController;
 import 'package:flutter_shake_animated/flutter_shake_animated.dart';
 import 'package:get/get.dart';
 
-import '../routes.dart';
 import 'menu.dart';
-import 'menu_controller.dart';
+import 'menu_nav_controller.dart';
+import 'menu_service.dart';
 import '../order_feature/order_controller.dart';
 
 class MenuItemBox extends StatelessWidget {
@@ -22,7 +22,7 @@ class MenuItemBox extends StatelessWidget {
       child: InkWell(
         onTap: !editable
             ? () => item is Menu
-                ? Get.offNamed(Routes.menu, arguments: item)
+                ? MenuNavController.to.open(item as Menu)
                 : Get.isRegistered<OrderController>()
                     ? Get.back(result: item)
                     : null
@@ -57,7 +57,7 @@ class MenuItemBox extends StatelessWidget {
                 content: const SizedBox(height: 0.0),
                 contentPadding: const EdgeInsets.only(bottom: 20.0),
                 onConfirm: () {
-                  MenuController.to.deleteFromMenu(item);
+                  MenuService.to.deleteFromMenu(item);
                   Get.back();
                 },
                 buttonColor: Colors.red,

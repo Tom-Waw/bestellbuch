@@ -8,8 +8,10 @@ abstract class MenuItem {
 
   String get path => parent == null ? id : "${parent!.path}/items/$id";
 
-  factory MenuItem.fromJson(Map<String, dynamic> json) =>
-      json.containsKey("price") ? Product.fromJson(json) : Menu.fromJson(json);
+  factory MenuItem.fromJson(String id, Map<String, dynamic> json) =>
+      json.containsKey("price")
+          ? Product.fromJson(id, json)
+          : Menu.fromJson(id, json);
 }
 
 class Menu extends MenuItem {
@@ -21,7 +23,9 @@ class Menu extends MenuItem {
     }
   }
 
-  bool get isRoot => parent?.parent == null;
+  bool get isRoot => parent == null;
+  Menu? get root => isRoot ? this : parent?.root;
+
   List<Product> get allProducts =>
       items.whereType<Product>().toList(growable: false) +
       items
@@ -29,25 +33,11 @@ class Menu extends MenuItem {
           .expand((menu) => menu.allProducts)
           .toList(growable: false);
 
-  Menu? getRoot() {
-    if (parent == null) return null;
-    if (parent?.parent == null) return this;
-    return parent?.getRoot();
-  }
-
-  factory Menu.fromJson(Map<String, dynamic> json) => Menu(
-        id: json["id"],
+  factory Menu.fromJson(String id, Map<String, dynamic> json) => Menu(
+        id: id,
         name: json["name"],
-        items: json.containsKey("items")
-            ? json["items"].map(MenuItem.fromJson).cast<MenuItem>().toList()
-            : [],
+        items: json["items"] ?? [],
       );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": name,
-        "items": items,
-      };
 }
 
 class Product extends MenuItem {
@@ -55,15 +45,9 @@ class Product extends MenuItem {
 
   Product({required super.id, required super.name, required this.price});
 
-  factory Product.fromJson(Map<String, dynamic> json) => Product(
-        id: json["id"],
+  factory Product.fromJson(String id, Map<String, dynamic> json) => Product(
+        id: id,
         name: json["name"],
         price: json["price"],
       );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": name,
-        "price": price,
-      };
 }

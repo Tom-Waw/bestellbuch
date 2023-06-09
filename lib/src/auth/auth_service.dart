@@ -11,7 +11,7 @@ class AuthService extends GetxService {
 
   late final Rx<User?> firebaseUser;
 
-  final Rx<Employee?> _employee = null.obs;
+  final Rxn<Employee> _employee = Rxn<Employee>();
 
   @override
   void onInit() async {
@@ -25,30 +25,25 @@ class AuthService extends GetxService {
     });
   }
 
-  bool get isAdmin => firebaseUser.value == null;
+  bool get isAdmin => firebaseUser.value != null;
 
   bool get isLoggedIn => _employee.value != null;
   Employee get employee => _employee.value!;
 
   void loginAsEmployee(Employee employee) => _employee(employee);
 
-  Future<void> loginAsAdmin(String name, String password) async {
+  Future<String?> loginAsAdmin(String name, String password) async {
     try {
       await _auth.signInWithEmailAndPassword(
         email: "$name@user.com",
         password: password,
       );
     } on FirebaseAuthException catch (e) {
-      Get.showSnackbar(GetSnackBar(
-        message: "Error: ${e.message}",
-      ));
+      return e.message;
     } catch (_) {
-      Get.showSnackbar(const GetSnackBar(
-        message: "Error: Please try again later.",
-      ));
+      return "Error: Please try again later.";
     }
-
-    if (isAdmin) Get.offAllNamed(Routes.home);
+    return null;
   }
 
   Future<void> logout() async => await _auth.signOut();

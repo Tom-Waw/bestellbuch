@@ -1,8 +1,8 @@
 import '../employees_feature/employee.dart';
 import '../menu_feature/menu.dart';
-import '../menu_feature/menu_controller.dart';
+import '../menu_feature/menu_service.dart';
 import '../tables_feature/table.dart';
-import '../tables_feature/tables_controller.dart';
+import '../tables_feature/table_service.dart';
 
 class Order {
   final String id;
@@ -27,13 +27,13 @@ class Order {
 
   factory Order.fromJson(String id, Map<String, dynamic> json) => Order(
         id: id,
-        table: TablesController.to.tables
-            .firstWhere((t) => t.number == json["table"]),
+        table:
+            TableService.to.tables.firstWhere((t) => t.number == json["table"]),
         waiter: json["waiter"],
         active: json["active"],
         items: <Product, int>{
           for (var item in json["items"])
-            MenuController.to.menus
+            MenuService.to.menus
                     .expand((menu) => menu.allProducts)
                     .firstWhere((product) => product.id == item["product"]):
                 item["count"]

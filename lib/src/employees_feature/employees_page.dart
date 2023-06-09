@@ -8,23 +8,20 @@ class EmployeesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() => Scaffold(
-          appBar: AppBar(title: const Text("Mitarbeiter")),
-          body: ListView.builder(
+    return Scaffold(
+      appBar: AppBar(title: const Text("Mitarbeiter")),
+      body: Obx(() => ListView.builder(
             itemCount: EmployeesController.to.employees.length,
             itemBuilder: (_, index) {
-              final employee = EmployeesController.to.employees[index - 1];
+              final employee = EmployeesController.to.employees[index];
               return Card(
                 child: ListTile(
                   contentPadding: const EdgeInsets.all(14.0),
-                  title: Text(
-                    employee,
-                    style: const TextStyle(fontSize: 18.0),
-                  ),
+                  title: Text(employee, style: const TextStyle(fontSize: 18.0)),
                 ),
               );
             },
-          ),
-        ));
+          )),
+    );
   }
 }

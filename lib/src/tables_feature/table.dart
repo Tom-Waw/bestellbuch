@@ -6,8 +6,9 @@ class TableGroup {
     tables = List<Table>.generate(number, (index) => Table(number: index));
   }
 
-  factory TableGroup.fromJson(Map<String, dynamic> json) => TableGroup(
-        id: json["id"],
+  factory TableGroup.fromJson(String id, Map<String, dynamic> json) =>
+      TableGroup(
+        id: id,
         number: json["number"],
       );
 

@@ -4,7 +4,9 @@ import 'package:get/get.dart';
 
 import 'firebase_options.dart';
 import 'src/auth/auth_service.dart';
+import 'src/menu_feature/menu_service.dart';
 import 'src/routes.dart';
+import 'src/tables_feature/table_service.dart';
 
 void main() async {
   // Initialize Firestore
@@ -28,7 +30,11 @@ class App extends StatelessWidget {
       theme: ThemeData(),
       getPages: getPages,
       initialRoute: Routes.login,
-      initialBinding: BindingsBuilder.put(() => AuthService(), permanent: true),
+      initialBinding: BindingsBuilder(() {
+        Get.put(AuthService(), permanent: true);
+        Get.put(TableService(), permanent: true);
+        Get.put(MenuService(), permanent: true);
+      }),
     );
   }
 }

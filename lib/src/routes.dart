@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 
 import 'auth/login_page.dart';
 
-import 'menu_feature/menu_controller.dart';
+import 'menu_feature/menu_nav_controller.dart';
 import 'menu_feature/menu_page.dart';
 
 import 'order_feature/order_controller.dart';
@@ -10,7 +10,6 @@ import 'order_feature/checkout_page.dart';
 
 import 'auth/home_page.dart';
 
-import 'tables_feature/tables_controller.dart';
 import 'tables_feature/tables_page.dart';
 
 import 'employees_feature/employees_controller.dart';
@@ -30,9 +29,7 @@ final getPages = [
   GetPage(
     name: Routes.login,
     page: () => const LoginPage(),
-    binding: BindingsBuilder(() {
-      Get.lazyPut(() => EmployeesController());
-    }),
+    binding: BindingsBuilder.put(() => EmployeesController()),
   ),
   GetPage(
     name: Routes.home,
@@ -41,31 +38,21 @@ final getPages = [
   GetPage(
     name: Routes.employees,
     page: () => const EmployeesPage(),
-    binding: BindingsBuilder(() {
-      Get.lazyPut(() => EmployeesController());
-    }),
+    binding: BindingsBuilder.put(() => EmployeesController()),
   ),
   GetPage(
     name: Routes.tables,
     page: () => const TablesPage(),
-    binding: BindingsBuilder(() {
-      Get.lazyPut(() => TablesController());
-    }),
   ),
   GetPage(
     name: Routes.menu,
     page: () => const MenuPage(),
-    binding: BindingsBuilder(() {
-      Get.lazyPut(() => MenuController());
-    }),
+    binding: BindingsBuilder.put(() => MenuNavController()),
   ),
   GetPage(
     name: Routes.checkout,
     page: () => const CheckoutPage(),
-    binding: BindingsBuilder(() {
-      Get.lazyPut(() => MenuController());
-      Get.lazyPut(() => OrderController());
-    }),
+    binding: BindingsBuilder.put(() => OrderController()),
   )
   // GetPage(
   //   name: Routes.print,

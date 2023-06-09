@@ -15,21 +15,21 @@ class LoginPage extends StatelessWidget {
       appBar: AppBar(title: const Text("Authentifizierung")),
       body: Padding(
         padding: const EdgeInsets.all(12.0),
-        child: ListView.builder(
-          itemCount: 1 + EmployeesController.to.employees.length,
-          itemBuilder: (_, index) {
-            if (index == 0) return _buildAdminLogin();
+        child: Obx(() => ListView.builder(
+              itemCount: 1 + EmployeesController.to.employees.length,
+              itemBuilder: (_, index) {
+                if (index == 0) return _buildAdminLogin();
 
-            final employee = EmployeesController.to.employees[index - 1];
-            return ListTile(
-              title: Text(employee),
-              onTap: () {
-                AuthService.to.loginAsEmployee(employee);
-                Get.offAllNamed(Routes.tables);
+                final employee = EmployeesController.to.employees[index - 1];
+                return ListTile(
+                  title: Text(employee),
+                  onTap: () {
+                    AuthService.to.loginAsEmployee(employee);
+                    Get.offAllNamed(Routes.tables);
+                  },
+                );
               },
-            );
-          },
-        ),
+            )),
       ),
     );
   }
@@ -37,6 +37,7 @@ class LoginPage extends StatelessWidget {
   Widget _buildAdminLogin() {
     return ListTile(
       title: const Text("Admin"),
+      trailing: const Icon(Icons.lock),
       onTap: () => Get.to(() => const AuthPage()),
     );
   }
