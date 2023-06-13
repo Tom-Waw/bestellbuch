@@ -17,7 +17,7 @@ class TableService extends GetxService {
       _tableGroups.isNotEmpty ? _tableGroups.first.tables : [];
 
   @override
-  void onInit() async {
+  void onInit() {
     super.onInit();
     _tableGroups.bindStream(_dbStream());
   }

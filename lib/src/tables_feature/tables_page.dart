@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:numberpicker/numberpicker.dart';
 
 import '../auth/auth_service.dart';
+import '../shared/utils.dart';
 import 'table_service.dart';
 import 'table_list_item.dart';
 
@@ -65,21 +66,37 @@ class _TablesPageState extends State<TablesPage> {
               children: [
                 Expanded(
                   child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                    ),
                     onPressed: () async {
-                      await TableService.to.addNTables(_pickerValue);
+                      if (_pickerValue > 0) {
+                        await Utils.showConfirmDialog(
+                          "Möchten Sie die Tische wirklich löschen?",
+                          () async =>
+                              await TableService.to.deleteNTables(_pickerValue),
+                        );
+                      }
+
                       Get.back();
                     },
-                    child: const Text("Hinzufügen"),
+                    child: const Text(
+                      "Löschen",
+                      style: TextStyle(fontSize: 16.0),
+                    ),
                   ),
                 ),
                 const SizedBox(width: 8.0),
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () async {
-                      await TableService.to.deleteNTables(_pickerValue);
+                      await TableService.to.addNTables(_pickerValue);
                       Get.back();
                     },
-                    child: const Text("Löschen"),
+                    child: const Text(
+                      "Hinzufügen",
+                      style: TextStyle(fontSize: 16.0),
+                    ),
                   ),
                 ),
               ],

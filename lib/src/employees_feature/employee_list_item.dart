@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 
+import '../shared/utils.dart';
 import 'employee.dart';
+import 'employee_form.dart';
 import 'employee_service.dart';
 
 class EmployeeListItem extends StatelessWidget {
   final Employee employee;
-  final Future Function() buildBottomSheet;
 
-  const EmployeeListItem(
-      {super.key, required this.employee, required this.buildBottomSheet});
+  const EmployeeListItem({super.key, required this.employee});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,12 @@ class EmployeeListItem extends StatelessWidget {
             backgroundColor: Colors.grey,
             foregroundColor: Colors.white,
             icon: Icons.edit,
-            onPressed: (_) => buildBottomSheet(),
+            onPressed: (_) => Utils.showBottomSheet(
+              "Mitarbeiter bearbeiten",
+              EmployeeForm(
+                employee: employee,
+              ),
+            ),
           ),
         ]),
         child: ListTile(

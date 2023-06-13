@@ -1,6 +1,6 @@
 abstract class MenuItem {
   final String id;
-  final String name;
+  String name;
 
   Menu? parent;
 
@@ -12,13 +12,16 @@ abstract class MenuItem {
       json.containsKey("price")
           ? Product.fromJson(id, json)
           : Menu.fromJson(id, json);
+
+  Map<String, dynamic> toJson();
 }
 
 class Menu extends MenuItem {
-  final List<MenuItem> items;
+  late final List<MenuItem> items;
 
-  Menu({required super.id, required super.name, required this.items}) {
-    for (MenuItem item in items) {
+  Menu({required super.id, required super.name, List<MenuItem>? items}) {
+    this.items = items ?? [];
+    for (MenuItem item in this.items) {
       item.parent = this;
     }
   }
@@ -38,10 +41,15 @@ class Menu extends MenuItem {
         name: json["name"],
         items: json["items"] ?? [],
       );
+
+  @override
+  Map<String, dynamic> toJson() => {
+        "name": name,
+      };
 }
 
 class Product extends MenuItem {
-  final double price;
+  double price;
 
   Product({required super.id, required super.name, required this.price});
 
@@ -50,4 +58,10 @@ class Product extends MenuItem {
         name: json["name"],
         price: json["price"],
       );
+
+  @override
+  Map<String, dynamic> toJson() => {
+        "name": name,
+        "price": price,
+      };
 }

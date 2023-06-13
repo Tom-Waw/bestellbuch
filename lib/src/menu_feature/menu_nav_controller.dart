@@ -11,8 +11,19 @@ class MenuNavController extends GetxController
   final _menus = MenuService.to.menus;
   late final TabController controller;
 
-  final Rxn<Menu> _current = Rxn<Menu>();
-  Menu? get current => _current.value;
+  final RxList<String> _idStack = <String>[].obs;
+  Menu? get current {
+    Menu? menu;
+    for (final id in _idStack) {
+      menu = (menu?.items ?? _menus)
+          .whereType<Menu>()
+          .toList()
+          .firstWhereOrNull((m) => m.id == id);
+      if (menu == null) break;
+    }
+    if (menu == null) _idStack.clear();
+    return menu;
+  }
 
   @override
   void onInit() {
@@ -22,7 +33,7 @@ class MenuNavController extends GetxController
     controller.addListener(() {
       if (controller.indexIsChanging) open(_menus[controller.index]);
     });
-    _menus.listen((_) {});
+    _menus.listen((_) => _idStack.refresh());
   }
 
   @override
@@ -31,7 +42,10 @@ class MenuNavController extends GetxController
     super.onClose();
   }
 
-  void open(Menu menu) => _current.value = menu;
+  List<String> menuToIdStack(Menu menu) =>
+      [if (!menu.isRoot) ...menuToIdStack(menu.parent!), menu.id];
 
-  void close() => _current.value = current?.parent ?? current;
+  void open(Menu menu) => _idStack.value = menuToIdStack(menu);
+
+  void close() => _idStack.removeLast();
 }

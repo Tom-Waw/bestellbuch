@@ -1,32 +1,33 @@
 import 'package:flutter/material.dart' hide MenuController;
-import 'package:flutter_shake_animated/flutter_shake_animated.dart';
 import 'package:get/get.dart';
 
+import '../routes.dart';
+import '../shared/utils.dart';
 import 'menu.dart';
+import 'menu_form.dart';
 import 'menu_nav_controller.dart';
-import 'menu_service.dart';
-import '../order_feature/order_service.dart';
+import 'product_form.dart';
 
 class MenuItemBox extends StatelessWidget {
   final MenuItem item;
   final bool editable;
+  final void Function()? exitEditMode;
 
-  const MenuItemBox({super.key, required this.item, this.editable = false});
+  const MenuItemBox({
+    super.key,
+    required this.item,
+    this.editable = false,
+    this.exitEditMode,
+  });
 
   @override
   Widget build(BuildContext context) {
-    Widget widget = Container(
+    return Container(
       decoration: const BoxDecoration(
         color: Colors.blue,
       ),
       child: InkWell(
-        onTap: !editable
-            ? () => item is Menu
-                ? MenuNavController.to.open(item as Menu)
-                : Get.isRegistered<OrderService>()
-                    ? Get.back(result: item)
-                    : null
-            : null,
+        onTap: _onTap,
         child: Ink(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -44,28 +45,28 @@ class MenuItemBox extends StatelessWidget {
         ),
       ),
     );
+  }
 
-    return editable
-        ? ShakeWidget(
-            duration: const Duration(milliseconds: 2500),
-            autoPlay: true,
-            shakeConstant: ShakeRotateConstant2(),
-            child: InkWell(
-              onTap: () => Get.defaultDialog(
-                title: "Willst du dieses Element wirklich löschen?",
-                titlePadding: const EdgeInsets.fromLTRB(25.0, 25.0, 25.0, 0.0),
-                content: const SizedBox(height: 0.0),
-                contentPadding: const EdgeInsets.only(bottom: 20.0),
-                onConfirm: () {
-                  MenuService.to.deleteFromMenu(item);
-                  Get.back();
-                },
-                buttonColor: Colors.red,
-                confirmTextColor: Colors.white,
-              ),
-              child: Ink(child: widget),
-            ),
-          )
-        : widget;
+  void _onTap() async {
+    if (editable) {
+      await Utils.showBottomSheet(
+        "Menü anpassen",
+        item is Menu
+            ? MenuForm(menu: item as Menu)
+            : ProductForm(product: item as Product),
+      );
+      exitEditMode?.call();
+      return;
+    }
+
+    if (item is Menu) {
+      MenuNavController.to.open(item as Menu);
+      return;
+    }
+
+    if (Get.previousRoute == Routes.checkout) {
+      Get.back(result: item);
+      return;
+    }
   }
 }

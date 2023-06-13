@@ -2,6 +2,7 @@ import 'package:bestellbuch/src/employees_feature/employee.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../shared/form_error_message.dart';
 import 'employee_service.dart';
 
 class EmployeeForm extends StatefulWidget {
@@ -47,14 +48,7 @@ class _EmployeeFormState extends State<EmployeeForm> {
           ),
           const SizedBox(height: 25.0),
           const Spacer(),
-          if (_error != null)
-            Padding(
-              padding: const EdgeInsets.only(top: 20.0),
-              child: Text(
-                _error!,
-                style: const TextStyle(color: Colors.red),
-              ),
-            ),
+          if (_error != null) FormErrorMessage(text: _error!),
           ElevatedButton(
             onPressed: () async {
               if (_formKey.currentState!.validate()) {
@@ -78,7 +72,10 @@ class _EmployeeFormState extends State<EmployeeForm> {
                 Get.back();
               }
             },
-            child: const Text("Bestätigen"),
+            child: const Text(
+              "Bestätigen",
+              style: TextStyle(fontSize: 16.0),
+            ),
           ),
         ],
       ),

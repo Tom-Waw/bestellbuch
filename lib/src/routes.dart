@@ -13,6 +13,7 @@ import 'tables_feature/tables_page.dart';
 import 'employees_feature/employees_page.dart';
 
 class Routes {
+  static String initial = login;
   static String login = '/login';
   static String home = '/home';
   static String employees = '/employees';

@@ -5,10 +5,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 import '../auth/auth_service.dart';
-import 'create_menu_form.dart';
+import '../shared/utils.dart';
+import 'menu_form.dart';
 import 'menu_item_box.dart';
 import 'menu_nav_controller.dart';
-import 'create_product_form.dart';
+import 'product_form.dart';
 
 class MenuPage extends StatefulWidget {
   const MenuPage({super.key});
@@ -45,13 +46,14 @@ class _MenuPageState extends State<MenuPage> {
               if (AuthService.to.isAdmin) ...[
                 IconButton(
                   icon: const Icon(Icons.edit),
+                  color: _editMode ? Colors.red : Colors.white,
                   onPressed: () => setState(() => _editMode = !_editMode),
                 ),
                 IconButton(
                   icon: const Icon(FontAwesomeIcons.plus),
-                  onPressed: () => Get.bottomSheet(
-                    _buildBottomSheet(),
-                    backgroundColor: Colors.white,
+                  onPressed: () => Utils.showBottomSheet(
+                    "Menü erweitern",
+                    _buildBottomSheetTabBarView(),
                   ),
                 )
               ]
@@ -71,8 +73,12 @@ class _MenuPageState extends State<MenuPage> {
                   crossAxisSpacing: 8.0,
                   mainAxisSpacing: 8.0,
                   children: _sortItems(MenuNavController.to.current!.items)
-                      .map((item) =>
-                          MenuItemBox(item: item, editable: _editMode))
+                      .map((item) => MenuItemBox(
+                            item: item,
+                            editable: _editMode,
+                            exitEditMode: () =>
+                                setState(() => _editMode = false),
+                          ))
                       .toList(),
                 )),
         ));
@@ -90,34 +96,29 @@ class _MenuPageState extends State<MenuPage> {
     ];
   }
 
-  Widget _buildBottomSheet() {
-    return const Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 30.0),
-      child: DefaultTabController(
-        length: 2,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text("Menü anpassen", style: TextStyle(fontSize: 18.0)),
-            SizedBox(height: 16.0),
-            TabBar(
-              labelColor: Colors.black,
-              tabs: [
-                Tab(text: "Produkt"),
-                Tab(text: "Menü"),
+  Widget _buildBottomSheetTabBarView() {
+    return const DefaultTabController(
+      length: 2,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          TabBar(
+            labelColor: Colors.black,
+            tabs: [
+              Tab(text: "Produkt"),
+              Tab(text: "Menü"),
+            ],
+          ),
+          SizedBox(height: 16.0),
+          Expanded(
+            child: TabBarView(
+              children: [
+                ProductForm(),
+                MenuForm(),
               ],
             ),
-            SizedBox(height: 16.0),
-            Expanded(
-              child: TabBarView(
-                children: [
-                  CreateProductForm(),
-                  CreateMenuForm(),
-                ],
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
