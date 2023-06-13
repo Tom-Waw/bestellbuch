@@ -5,14 +5,11 @@ import 'auth/login_page.dart';
 import 'menu_feature/menu_nav_controller.dart';
 import 'menu_feature/menu_page.dart';
 
-import 'order_feature/order_service.dart';
+import 'order_feature/checkout_controller.dart';
 import 'order_feature/checkout_page.dart';
 
 import 'auth/home_page.dart';
-
 import 'tables_feature/tables_page.dart';
-
-import 'employees_feature/employee_service.dart';
 import 'employees_feature/employees_page.dart';
 
 class Routes {
@@ -29,7 +26,6 @@ final getPages = [
   GetPage(
     name: Routes.login,
     page: () => const LoginPage(),
-    binding: BindingsBuilder.put(() => EmployeeService()),
   ),
   GetPage(
     name: Routes.home,
@@ -38,7 +34,6 @@ final getPages = [
   GetPage(
     name: Routes.employees,
     page: () => const EmployeesPage(),
-    binding: BindingsBuilder.put(() => EmployeeService()),
   ),
   GetPage(
     name: Routes.tables,
@@ -52,7 +47,7 @@ final getPages = [
   GetPage(
     name: Routes.checkout,
     page: () => const CheckoutPage(),
-    binding: BindingsBuilder.put(() => OrderService()),
+    binding: BindingsBuilder.put(() => CheckoutController()),
   )
   // GetPage(
   //   name: Routes.print,
