@@ -1,5 +1,5 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
 
 import 'firebase_options.dart';
@@ -27,18 +27,17 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: "Bestellbuch",
-      navigatorKey: GlobalKey(debugLabel: "app"),
-      theme: ThemeData(),
-      getPages: getPages,
-      initialRoute: Routes.login,
-      initialBinding: BindingsBuilder(() {
-        Get.put(AuthService(), permanent: true);
-        Get.put(TableService(), permanent: true);
-        Get.put(MenuService(), permanent: true);
-        Get.put(OrderService(), permanent: true);
-        Get.put(EmployeeService(), permanent: true);
-      }),
-    );
+        title: "Bestellbuch",
+        navigatorKey: GlobalKey(debugLabel: "app"),
+        theme: ThemeData(),
+        getPages: getPages,
+        initialRoute: Routes.initial,
+        initialBinding: BindingsBuilder(() {
+          Get.put(EmployeeService(), permanent: true);
+          Get.put(TableService(), permanent: true);
+          Get.put(MenuService(), permanent: true);
+          Get.put(OrderService(), permanent: true);
+          Get.put(AuthService(), permanent: true);
+        }));
   }
 }
