@@ -1,78 +1,65 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
-import '../routes/routes.dart';
+import '../employees_feature/employee.dart';
+import '../employees_feature/employee_service.dart';
+import '../routes.dart';
 
 class AuthService extends GetxService {
-  static AuthService get to => Get.find();
-
-  //Variables
-  Rx<bool> isReady = false.obs;
   final _auth = FirebaseAuth.instance;
+
+  static AuthService get to => Get.find<AuthService>();
+
   late final Rx<User?> firebaseUser;
-  Rx<bool> isAdmin = false.obs;
+
+  final Rxn<Employee> _employee = Rxn<Employee>();
 
   @override
   void onInit() async {
     super.onInit();
     await logout();
+
     firebaseUser = _auth.currentUser.obs;
     firebaseUser.bindStream(_auth.userChanges());
-    ever(firebaseUser, _setInitialScreen);
-    isReady.value = true;
+    ever(firebaseUser, (User? user) {
+      if (user == null && Get.currentRoute != Routes.login) {
+        Get.offAllNamed(Routes.login);
+      }
+    });
   }
 
-  bool get isLoggedIn => firebaseUser.value != null;
+  bool get isAdmin => firebaseUser.value != null;
 
-  Future<void> refreshIsAdmin() async {
-    final uid = firebaseUser.value?.uid;
-    final snapshot =
-        await FirebaseFirestore.instance.collection("Admin").doc(uid).get();
+  bool get isLoggedIn => _employee.value != null;
+  Employee get employee => _employee.value!;
 
-    isAdmin(snapshot.exists);
+  void loginAsEmployee(Employee employee) {
+    employee.active = true;
+    EmployeeService.to.updateEmployee(employee);
+    _employee.value = employee;
   }
 
-  _setInitialScreen(User? user) {
-    refreshIsAdmin();
-    if (user == null) Get.offAllNamed(Routes.login);
-  }
-
-  Future<String?> createUserWithNameAndPassword(
-      String name, String password) async {
-    try {
-      await _auth.createUserWithEmailAndPassword(
-        email: "$name@user.com",
-        password: password,
-      );
-      // firebaseUser.value != null
-      //     ? Get.offAll(() => const Dashboard())
-      //     : Get.to(() => const WelcomeScreen());
-    } on FirebaseAuthException catch (e) {
-      return "Error: ${e.message}";
-    } catch (_) {
-      return "Error: Please try again later.";
-    } finally {
-      await refreshIsAdmin();
-    }
-    return null;
-  }
-
-  Future<String?> loginWithNameAndPassword(String name, String password) async {
+  Future<String?> loginAsAdmin(String name, String password) async {
     try {
       await _auth.signInWithEmailAndPassword(
         email: "$name@user.com",
         password: password,
       );
     } on FirebaseAuthException catch (e) {
-      return "Error: ${e.message}";
+      return e.message;
     } catch (_) {
       return "Error: Please try again later.";
-    } finally {
-      await refreshIsAdmin();
     }
     return null;
   }
 
-  Future<void> logout() async => await _auth.signOut();
+  Future<void> logout() async {
+    await _auth.signOut();
+
+    if (isLoggedIn) {
+      employee.active = false;
+      EmployeeService.to.updateEmployee(employee);
+      _employee.value = null;
+    }
+  }
 }
