@@ -5,7 +5,7 @@ import 'package:numberpicker/numberpicker.dart';
 
 import '../auth/auth_service.dart';
 import 'table_service.dart';
-import 'tables_list_item.dart';
+import 'table_list_item.dart';
 
 class TablesPage extends StatefulWidget {
   const TablesPage({super.key});
@@ -37,7 +37,7 @@ class _TablesPageState extends State<TablesPage> {
       body: Obx(() => ListView.builder(
             itemCount: TableService.to.tables.length,
             itemBuilder: (_, idx) =>
-                TablesListItem(table: TableService.to.tables[idx]),
+                TableListItem(table: TableService.to.tables[idx]),
           )),
     );
   }

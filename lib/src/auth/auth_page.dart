@@ -67,14 +67,12 @@ class _AuthPageState extends State<AuthPage> {
                       _passwordController.text.trim(),
                     );
 
-                    if (error == null) {
-                      Get.offAllNamed(Routes.home);
+                    if (error != null) {
+                      setState(() => _error = error);
                       return;
                     }
 
-                    setState(() {
-                      _error = error;
-                    });
+                    Get.offAllNamed(Routes.home);
                   }
                 },
                 child: const Text("Anmelden"),

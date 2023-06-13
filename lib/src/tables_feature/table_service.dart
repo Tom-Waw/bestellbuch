@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 
+import '../order_feature/order_service.dart';
 import 'table.dart';
 
 /// A class to read and update the tables.
@@ -27,16 +28,25 @@ class TableService extends GetxService {
           .toList());
 
   /// Add and persist n new tables.
-  Future<void> addNTables(int n) async {
-    if (n <= 0) return;
+  Future<String?> addNTables(int n) async {
+    if (n <= 0) return "Anzahl der Tische muss größer als 0 sein.";
 
-    _ref.doc("default").update({"number": tables.length + n});
+    await _ref.doc(_tableGroups.first.id).update({"number": tables.length + n});
+    return null;
   }
 
   /// Delete last n tables.
-  Future<void> deleteNTables(int n) async {
-    if (n <= 0) return;
+  Future<String?> deleteNTables(int n) async {
+    if (n <= 0) return "Anzahl der Tische muss größer als 0 sein.";
 
-    _ref.doc("default").update({"number": max(tables.length - n, 0)});
+    if (OrderService.to.activeOrders
+        .any((order) => order.table.number > tables.length - n)) {
+      return "Es gibt noch aktive Bestellungen unter den zu löschenden Tischen.";
+    }
+
+    await _ref
+        .doc(_tableGroups.first.id)
+        .update({"number": max(tables.length - n, 0)});
+    return null;
   }
 }

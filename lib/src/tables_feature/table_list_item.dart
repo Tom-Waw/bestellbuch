@@ -4,10 +4,10 @@ import 'package:get/get.dart';
 
 import 'table.dart';
 
-class TablesListItem extends StatelessWidget {
+class TableListItem extends StatelessWidget {
   final Table table;
 
-  const TablesListItem({super.key, required this.table});
+  const TableListItem({super.key, required this.table});
 
   @override
   Widget build(BuildContext context) {

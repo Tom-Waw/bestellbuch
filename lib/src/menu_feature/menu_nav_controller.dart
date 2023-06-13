@@ -12,7 +12,6 @@ class MenuNavController extends GetxController
   late final TabController controller;
 
   final Rxn<Menu> _current = Rxn<Menu>();
-
   Menu? get current => _current.value;
 
   @override
@@ -23,7 +22,7 @@ class MenuNavController extends GetxController
     controller.addListener(() {
       if (controller.indexIsChanging) open(_menus[controller.index]);
     });
-    _menus.listen((_) { });
+    _menus.listen((_) {});
   }
 
   @override

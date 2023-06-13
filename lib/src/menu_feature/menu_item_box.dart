@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'menu.dart';
 import 'menu_nav_controller.dart';
 import 'menu_service.dart';
-import '../order_feature/order_controller.dart';
+import '../order_feature/order_service.dart';
 
 class MenuItemBox extends StatelessWidget {
   final MenuItem item;
@@ -23,7 +23,7 @@ class MenuItemBox extends StatelessWidget {
         onTap: !editable
             ? () => item is Menu
                 ? MenuNavController.to.open(item as Menu)
-                : Get.isRegistered<OrderController>()
+                : Get.isRegistered<OrderService>()
                     ? Get.back(result: item)
                     : null
             : null,

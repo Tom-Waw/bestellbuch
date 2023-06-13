@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 
+import 'checkout_controller.dart';
 import 'order.dart';
-import 'order_controller.dart';
+import 'order_service.dart';
 import '../routes.dart';
 
 class CheckoutPage extends StatelessWidget {
@@ -12,20 +13,20 @@ class CheckoutPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() => !OrderController.to.isReady
+    return Obx(() => !CheckoutController.to.isReady
         ? Scaffold(
             appBar: AppBar(title: const Text("Bestellung")),
             body: const CircularProgressIndicator(),
           )
         : Scaffold(
             appBar: AppBar(
-              title: Text(OrderController.to.order.table.name),
+              title: Text(CheckoutController.to.current.table.name),
               actions: [
                 IconButton(
                   icon: const Icon(Icons.add),
                   onPressed: () async {
                     Product product = await Get.toNamed(Routes.menu);
-                    OrderController.to.addItem(product);
+                    CheckoutController.to.addItem(product);
                   },
                 ),
                 IconButton(
@@ -34,14 +35,14 @@ class CheckoutPage extends StatelessWidget {
               ],
             ),
             body: ListView.builder(
-              itemCount: OrderController.to.order.items.length,
+              itemCount: CheckoutController.to.current.items.length,
               itemBuilder: (_, index) {
-                MapEntry entry =
-                    OrderController.to.order.items.entries.elementAt(index);
+                MapEntry entry = CheckoutController.to.current.items.entries
+                    .elementAt(index);
                 return _buildCheckoutItem(entry.key, entry.value);
               },
             ),
-            bottomSheet: _buildFooter(OrderController.to.order),
+            bottomSheet: _buildFooter(CheckoutController.to.current),
           ));
   }
 
@@ -52,7 +53,7 @@ class CheckoutPage extends StatelessWidget {
         content: const SizedBox(height: 0.0),
         contentPadding: const EdgeInsets.only(bottom: 20.0),
         onConfirm: () {
-          OrderController.to.removeOrder();
+          OrderService.to.cancelOrder(CheckoutController.to.current);
           Get.back(closeOverlays: true);
         },
         buttonColor: Colors.red,
@@ -66,13 +67,13 @@ class CheckoutPage extends StatelessWidget {
         motion: const ScrollMotion(),
         children: [
           SlidableAction(
-            onPressed: (_) => OrderController.to.addItem(product),
+            onPressed: (_) => CheckoutController.to.addItem(product),
             label: "Erhöhen",
             icon: Icons.add,
             backgroundColor: Colors.green,
           ),
           SlidableAction(
-            onPressed: (_) => OrderController.to.removeItem(product),
+            onPressed: (_) => CheckoutController.to.removeItem(product),
             autoClose: false,
             label: "Verringern",
             icon: Icons.remove,
@@ -84,11 +85,11 @@ class CheckoutPage extends StatelessWidget {
       endActionPane: ActionPane(
         motion: const ScrollMotion(),
         dismissible: DismissiblePane(
-          onDismissed: () => OrderController.to.removeProduct(product),
+          onDismissed: () => CheckoutController.to.removeProduct(product),
         ),
         children: [
           SlidableAction(
-            onPressed: (_) => OrderController.to.removeProduct(product),
+            onPressed: (_) => CheckoutController.to.removeProduct(product),
             label: "Löschen",
             icon: Icons.delete,
             backgroundColor: Colors.red,
@@ -131,7 +132,7 @@ class CheckoutPage extends StatelessWidget {
               backgroundColor: Colors.green,
             ),
             onPressed: () {
-              OrderController.to.closeOrder();
+              CheckoutController.to.checkout();
               Get.back();
               // TODO: print order
             },

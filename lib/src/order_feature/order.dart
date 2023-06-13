@@ -1,4 +1,5 @@
 import '../employees_feature/employee.dart';
+import '../employees_feature/employee_service.dart';
 import '../menu_feature/menu.dart';
 import '../menu_feature/menu_service.dart';
 import '../tables_feature/table.dart';
@@ -6,7 +7,7 @@ import '../tables_feature/table_service.dart';
 
 class Order {
   final String id;
-  final Table table;
+  Table table;
   final Employee waiter;
   bool active;
   final Map<Product, int> items;
@@ -27,9 +28,12 @@ class Order {
 
   factory Order.fromJson(String id, Map<String, dynamic> json) => Order(
         id: id,
-        table:
-            TableService.to.tables.firstWhere((t) => t.number == json["table"]),
-        waiter: json["waiter"],
+        table: TableService.to.tables.firstWhere(
+          (t) => t.number == json["table"],
+        ),
+        waiter: EmployeeService.to.employees.firstWhere(
+          (e) => e.id == json["waiter"],
+        ),
         active: json["active"],
         items: <Product, int>{
           for (var item in json["items"])
@@ -42,7 +46,7 @@ class Order {
 
   Map<String, dynamic> toJson() => {
         "table": table.number,
-        "waiter": waiter,
+        "waiter": waiter.id,
         "active": active,
         "items": [
           for (var entry in items.entries)
