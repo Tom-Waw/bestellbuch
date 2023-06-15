@@ -21,8 +21,13 @@ class AuthService extends GetxService {
 
     firebaseUser = _auth.currentUser.obs;
     firebaseUser.bindStream(_auth.userChanges());
-    ever(firebaseUser, (User? user) {
+    ever(firebaseUser, (user) {
       if (user == null && Get.currentRoute != Routes.login) {
+        Get.offAllNamed(Routes.login);
+      }
+    });
+    ever(_employee, (employee) {
+      if (employee == null && Get.currentRoute != Routes.login) {
         Get.offAllNamed(Routes.login);
       }
     });
