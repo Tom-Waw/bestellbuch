@@ -25,6 +25,10 @@ class _TablesPageState extends State<TablesPage> {
         title: const Text("Tischplan"),
         centerTitle: true,
         actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () => AuthService.to.logout(),
+          ),
           if (AuthService.to.isAdmin)
             IconButton(
               icon: const Icon(FontAwesomeIcons.plusMinus),
