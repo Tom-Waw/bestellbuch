@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
+import '../shared/add_delete_buttons.dart';
 import '../shared/form_error_message.dart';
 import '../shared/utils.dart';
 import 'menu.dart';
@@ -20,15 +21,16 @@ class ProductForm extends StatefulWidget {
 class _ProductFormState extends State<ProductForm> {
   final _formKey = GlobalKey<FormState>();
 
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _priceController = TextEditingController();
+  late final TextEditingController _nameController;
+  late final TextEditingController _priceController;
   String? _error;
 
   @override
   void initState() {
     super.initState();
-    _nameController.text = widget.product?.name ?? "";
-    _priceController.text = widget.product?.price.toString() ?? "";
+    _nameController = TextEditingController(text: widget.product?.name);
+    _priceController =
+        TextEditingController(text: widget.product?.price.toString());
   }
 
   @override
@@ -71,46 +73,26 @@ class _ProductFormState extends State<ProductForm> {
           const SizedBox(height: 25.0),
           const Spacer(),
           if (_error != null) FormErrorMessage(text: _error!),
-          Row(
-            children: [
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: _onDelete,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
-                  ),
-                  child: Text(
-                    widget.product == null ? "Abbrechen" : "Löschen",
-                    style: const TextStyle(fontSize: 16.0),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 8.0),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: _onAdd,
-                  child: const Text(
-                    "Bestätigen",
-                    style: TextStyle(fontSize: 16.0),
-                  ),
-                ),
-              ),
-            ],
-          ),
+          AddDeleteButtons(
+            onAdd: _onAdd,
+            onDelete: _onDelete,
+            deleteText: widget.product == null ? "Abbrechen" : "Löschen",
+          )
         ],
       ),
     );
   }
 
-  void _onDelete() async {
-    if (widget.product != null) {
-      await Utils.showConfirmDialog(
-        "Möchten Sie den Artikel wirklich löschen?",
-        () async => await MenuService.to.deleteItem(widget.product!),
-      );
+  void _onDelete() {
+    if (widget.product == null) {
+      Get.back();
+      return;
     }
 
-    Get.back();
+    Utils.showConfirmDialog(
+      "Möchten Sie den Artikel wirklich löschen?",
+      () async => await MenuService.to.deleteItem(widget.product!),
+    );
   }
 
   void _onAdd() async {

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:numberpicker/numberpicker.dart';
 
 import '../auth/auth_service.dart';
+import '../shared/add_delete_buttons.dart';
 import '../shared/utils.dart';
 import 'table_service.dart';
 import 'table_list_item.dart';
@@ -25,16 +26,17 @@ class _TablesPageState extends State<TablesPage> {
         title: const Text("Tischplan"),
         centerTitle: true,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: () => AuthService.to.logout(),
-          ),
+          if (!AuthService.to.isAdmin)
+            IconButton(
+              icon: const Icon(Icons.logout),
+              onPressed: () => AuthService.to.logout(),
+            ),
           if (AuthService.to.isAdmin)
             IconButton(
               icon: const Icon(FontAwesomeIcons.plusMinus),
-              onPressed: () => Get.bottomSheet(
+              onPressed: () => Utils.showBottomSheet(
+                "Tische anpassen",
                 _buildBottomSheet(),
-                backgroundColor: Colors.white,
               ),
             )
         ],
@@ -47,65 +49,40 @@ class _TablesPageState extends State<TablesPage> {
     );
   }
 
-  Widget _buildBottomSheet() => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 30.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Text("Tische anpassen", style: TextStyle(fontSize: 20.0)),
-            Expanded(
-              child: Center(
-                child: StatefulBuilder(
-                  builder: (_, setState) => NumberPicker(
-                    axis: Axis.horizontal,
-                    minValue: 0,
-                    maxValue: 50,
-                    value: _pickerValue,
-                    onChanged: (value) => setState(() => _pickerValue = value),
-                  ),
-                ),
-              ),
+  Widget _buildBottomSheet() => Column(children: [
+        Center(
+          child: StatefulBuilder(
+            builder: (_, setState) => NumberPicker(
+              axis: Axis.horizontal,
+              minValue: 0,
+              maxValue: 50,
+              value: _pickerValue,
+              onChanged: (value) => setState(() => _pickerValue = value),
             ),
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                    ),
-                    onPressed: () async {
-                      if (_pickerValue > 0) {
-                        await Utils.showConfirmDialog(
-                          "Möchten Sie die Tische wirklich löschen?",
-                          () async =>
-                              await TableService.to.deleteNTables(_pickerValue),
-                        );
-                      }
-
-                      Get.back();
-                    },
-                    child: const Text(
-                      "Löschen",
-                      style: TextStyle(fontSize: 16.0),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 8.0),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      await TableService.to.addNTables(_pickerValue);
-                      Get.back();
-                    },
-                    child: const Text(
-                      "Hinzufügen",
-                      style: TextStyle(fontSize: 16.0),
-                    ),
-                  ),
-                ),
-              ],
-            )
-          ],
+          ),
         ),
-      );
+        AddDeleteButtons(
+          onAdd: _onAdd,
+          onDelete: _onDelete,
+          deleteText: _pickerValue > 0 && TableService.to.tables.isNotEmpty
+              ? "Löschen"
+              : "Abbrechen",
+        ),
+      ]);
+
+  void _onAdd() async {
+    await TableService.to.addNTables(_pickerValue);
+    Get.back();
+  }
+
+  void _onDelete() {
+    if (TableService.to.tables.isEmpty || _pickerValue == 0) {
+      return;
+    }
+
+    Utils.showConfirmDialog(
+      "Möchten Sie die Tische wirklich löschen?",
+      () async => await TableService.to.deleteNTables(_pickerValue),
+    );
+  }
 }

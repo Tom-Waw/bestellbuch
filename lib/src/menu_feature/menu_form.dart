@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../shared/add_delete_buttons.dart';
 import '../shared/form_error_message.dart';
 import '../shared/utils.dart';
 import 'menu.dart';
@@ -51,46 +52,26 @@ class _MenuFormState extends State<MenuForm> {
           const SizedBox(height: 25.0),
           const Spacer(),
           if (_error != null) FormErrorMessage(text: _error!),
-          Row(
-            children: [
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: _onDelete,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
-                  ),
-                  child: Text(
-                    widget.menu == null ? "Abbrechen" : "Löschen",
-                    style: const TextStyle(fontSize: 16.0),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 8.0),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: _onAdd,
-                  child: const Text(
-                    "Bestätigen",
-                    style: TextStyle(fontSize: 16.0),
-                  ),
-                ),
-              ),
-            ],
-          ),
+          AddDeleteButtons(
+            onAdd: _onAdd,
+            onDelete: _onDelete,
+            deleteText: widget.menu == null ? "Abbrechen" : "Löschen",
+          )
         ],
       ),
     );
   }
 
   void _onDelete() async {
-    if (widget.menu != null) {
-      await Utils.showConfirmDialog(
-        "Möchten Sie das Menü mit allen Inhalten wirklich löschen?",
-        () async => await MenuService.to.deleteItem(widget.menu!),
-      );
+    if (widget.menu == null) {
+      Get.back();
+      return;
     }
 
-    Get.back();
+    await Utils.showConfirmDialog(
+      "Möchten Sie das Menü mit allen Inhalten wirklich löschen?",
+      () async => await MenuService.to.deleteItem(widget.menu!),
+    );
   }
 
   void _onAdd() async {

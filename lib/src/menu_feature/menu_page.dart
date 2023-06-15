@@ -1,14 +1,14 @@
-import 'package:bestellbuch/src/menu_feature/menu.dart';
-import 'package:bestellbuch/src/menu_feature/menu_service.dart';
 import 'package:flutter/material.dart' hide MenuController;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 import '../auth/auth_service.dart';
 import '../shared/utils.dart';
+import 'menu.dart';
 import 'menu_form.dart';
 import 'menu_item_box.dart';
 import 'menu_nav_controller.dart';
+import 'menu_service.dart';
 import 'product_form.dart';
 
 class MenuPage extends StatefulWidget {
