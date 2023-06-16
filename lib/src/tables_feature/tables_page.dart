@@ -22,31 +22,37 @@ class _TablesPageState extends State<TablesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Tischplan"),
-        centerTitle: true,
-        actions: [
-          if (!AuthService.to.isAdmin)
-            IconButton(
-              icon: const Icon(Icons.logout),
-              onPressed: () => AuthService.to.logout(),
-            ),
-          if (AuthService.to.isAdmin)
-            IconButton(
-              icon: const Icon(FontAwesomeIcons.plusMinus),
-              onPressed: () => Utils.showBottomSheet(
-                "Tische anpassen",
-                _buildBottomSheet(),
+        appBar: AppBar(
+          title: const Text("Tischplan"),
+          centerTitle: true,
+          actions: [
+            if (!AuthService.to.isAdmin)
+              IconButton(
+                icon: const Icon(Icons.logout),
+                onPressed: () => AuthService.to.logout(),
               ),
-            )
-        ],
-      ),
-      body: Obx(() => ListView.builder(
-            itemCount: TableService.to.tables.length,
-            itemBuilder: (_, idx) =>
-                TableListItem(table: TableService.to.tables[idx]),
-          )),
-    );
+            if (AuthService.to.isAdmin)
+              IconButton(
+                icon: const Icon(FontAwesomeIcons.plusMinus),
+                onPressed: () => Utils.showBottomSheet(
+                  "Tische anpassen",
+                  _buildBottomSheet(),
+                ),
+              )
+          ],
+        ),
+        body: Obx(
+          () => ListView.builder(
+            itemCount: TableService.to.tableGroups.length,
+            itemBuilder: (_, idx) => ExpansionTile(
+              title: Text(TableService.to.tableGroups[idx].name),
+              children: [
+                ...TableService.to.tableGroups[idx].tables
+                    .map((table) => TableListItem(table: table))
+              ],
+            ),
+          ),
+        ));
   }
 
   Widget _buildBottomSheet() => Column(children: [

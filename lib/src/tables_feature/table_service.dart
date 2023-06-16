@@ -12,14 +12,12 @@ class TableService extends GetxService {
 
   static TableService get to => Get.find<TableService>();
 
-  final RxList<TableGroup> _tableGroups = <TableGroup>[].obs;
-  List<Table> get tables =>
-      _tableGroups.isNotEmpty ? _tableGroups.first.tables : [];
+  final RxList<TableGroup> tableGroups = <TableGroup>[].obs;
 
   @override
   void onInit() {
     super.onInit();
-    _tableGroups.bindStream(_dbStream());
+    tableGroups.bindStream(_dbStream());
   }
 
   Stream<List<TableGroup>> _dbStream() =>
@@ -28,25 +26,25 @@ class TableService extends GetxService {
           .toList());
 
   /// Add and persist n new tables.
-  Future<String?> addNTables(int n) async {
+  Future<String?> addNTables(int n, TableGroup group) async {
     if (n <= 0) return "Anzahl der Tische muss größer als 0 sein.";
 
-    await _ref.doc(_tableGroups.first.id).update({"number": tables.length + n});
+    await _ref.doc(group.id).update({"number": group.tables.length + n});
     return null;
   }
 
   /// Delete last n tables.
-  Future<String?> deleteNTables(int n) async {
+  Future<String?> deleteNTables(int n, TableGroup group) async {
     if (n <= 0) return "Anzahl der Tische muss größer als 0 sein.";
 
     if (OrderService.to.activeOrders
-        .any((order) => order.table.number > tables.length - n)) {
+        .any((order) => group.tables.contains(order.table))) {
       return "Es gibt noch aktive Bestellungen unter den zu löschenden Tischen.";
     }
 
     await _ref
-        .doc(_tableGroups.first.id)
-        .update({"number": max(tables.length - n, 0)});
+        .doc(group.id)
+        .update({"number": max(group.tables.length - n, 0)});
     return null;
   }
 }
