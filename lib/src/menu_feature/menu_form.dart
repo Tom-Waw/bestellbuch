@@ -6,7 +6,7 @@ import '../shared/form_error_message.dart';
 import '../shared/utils.dart';
 import 'menu.dart';
 import 'menu_nav_controller.dart';
-import 'menu_service.dart';
+import '../services/menu_service.dart';
 
 class MenuForm extends StatefulWidget {
   final Menu? menu;
@@ -20,13 +20,13 @@ class MenuForm extends StatefulWidget {
 class _MenuFormState extends State<MenuForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  final TextEditingController _nameController = TextEditingController();
+  late final TextEditingController _nameController;
   String? _error;
 
   @override
   void initState() {
     super.initState();
-    _nameController.text = widget.menu?.name ?? "";
+    _nameController = TextEditingController(text: widget.menu?.name);
   }
 
   @override
@@ -63,15 +63,20 @@ class _MenuFormState extends State<MenuForm> {
   }
 
   void _onDelete() async {
-    if (widget.menu == null) {
-      Get.back();
-      return;
-    }
+    if (widget.menu == null) return Get.back();
+
+    String? error;
 
     await Utils.showConfirmDialog(
       "Möchten Sie das Menü mit allen Inhalten wirklich löschen?",
-      () async => await MenuService.to.deleteItem(widget.menu!),
+      () async {
+        error = await MenuService.to.deleteItem(widget.menu!);
+      },
     );
+
+    if (error != null) return setState(() => _error = error);
+
+    Get.back();
   }
 
   void _onAdd() async {
@@ -89,10 +94,7 @@ class _MenuFormState extends State<MenuForm> {
       );
     }
 
-    if (error != null) {
-      setState(() => _error = error);
-      return;
-    }
+    if (error != null) return setState(() => _error = error);
 
     Get.back();
   }

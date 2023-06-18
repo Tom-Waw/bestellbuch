@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 import '../shared/utils.dart';
 import 'employee_form.dart';
 import 'employee_list_item.dart';
-import 'employee_service.dart';
+import '../services/employee_service.dart';
 
 class EmployeesPage extends StatelessWidget {
   const EmployeesPage({super.key});
@@ -18,7 +17,7 @@ class EmployeesPage extends StatelessWidget {
         centerTitle: true,
         actions: [
           IconButton(
-            icon: const Icon(FontAwesomeIcons.plus),
+            icon: const Icon(Icons.add),
             onPressed: () => Utils.showBottomSheet(
               "Mitarbeiter hinzufügen",
               const EmployeeForm(),

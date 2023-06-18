@@ -6,18 +6,15 @@ import 'table.dart';
 
 class TableListItem extends StatelessWidget {
   final Table table;
+  final TableGroup group;
 
-  const TableListItem({super.key, required this.table});
+  const TableListItem({super.key, required this.table, required this.group});
 
   @override
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
-        contentPadding: const EdgeInsets.all(14.0),
-        title: Text(
-          table.name,
-          style: const TextStyle(fontSize: 18.0),
-        ),
+        title: Text(table.name),
         onTap: () => Get.toNamed(
           Routes.checkout,
           arguments: table,

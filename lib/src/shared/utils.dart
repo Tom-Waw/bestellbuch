@@ -17,11 +17,7 @@ class Utils {
         ),
       );
 
-  static showConfirmDialog(
-    String text,
-    Future<void> Function() onConfirm, [
-    bool closeOverlays = true,
-  ]) =>
+  static showConfirmDialog(String text, Future<void> Function() onConfirm) =>
       Get.defaultDialog(
         title: text,
         titlePadding: const EdgeInsets.all(25.0).copyWith(bottom: 0.0),
@@ -29,7 +25,7 @@ class Utils {
         contentPadding: const EdgeInsets.all(25.0),
         onConfirm: () async {
           await onConfirm();
-          Get.back(closeOverlays: closeOverlays);
+          Get.back();
         },
         buttonColor: Colors.red,
         confirmTextColor: Colors.white,

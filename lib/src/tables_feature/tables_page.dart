@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:numberpicker/numberpicker.dart';
 
-import '../auth/auth_service.dart';
-import '../shared/add_delete_buttons.dart';
+import '../services/auth_service.dart';
 import '../shared/utils.dart';
-import 'table_service.dart';
+import '../services/table_service.dart';
+import 'table_form.dart';
 import 'table_list_item.dart';
 
 class TablesPage extends StatefulWidget {
@@ -17,8 +15,6 @@ class TablesPage extends StatefulWidget {
 }
 
 class _TablesPageState extends State<TablesPage> {
-  int _pickerValue = 0;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,62 +29,46 @@ class _TablesPageState extends State<TablesPage> {
               ),
             if (AuthService.to.isAdmin)
               IconButton(
-                icon: const Icon(FontAwesomeIcons.plusMinus),
+                icon: const Icon(Icons.add),
                 onPressed: () => Utils.showBottomSheet(
-                  "Tische anpassen",
-                  _buildBottomSheet(),
+                  "Tischgruppe hinzufügen",
+                  const TableForm(),
                 ),
-              )
+              ),
           ],
         ),
         body: Obx(
           () => ListView.builder(
             itemCount: TableService.to.tableGroups.length,
-            itemBuilder: (_, idx) => ExpansionTile(
-              title: Text(TableService.to.tableGroups[idx].name),
-              children: [
-                ...TableService.to.tableGroups[idx].tables
-                    .map((table) => TableListItem(table: table))
-              ],
-            ),
+            itemBuilder: (_, idx) {
+              final group = TableService.to.tableGroups[idx];
+              return Card(
+                child: ExpansionTile(
+                  tilePadding: const EdgeInsets.all(14.0),
+                  title: Text(
+                    group.name,
+                    style: const TextStyle(fontSize: 18.0),
+                  ),
+                  trailing: AuthService.to.isAdmin
+                      ? IconButton(
+                          icon: const Icon(Icons.edit),
+                          onPressed: () => Utils.showBottomSheet(
+                            "Tischgruppe anpassen",
+                            TableForm(group: group),
+                          ),
+                        )
+                      : null,
+                  children: [
+                    const Divider(thickness: 2.0),
+                    ...group.tables.map((table) => TableListItem(
+                          table: table,
+                          group: group,
+                        ))
+                  ],
+                ),
+              );
+            },
           ),
         ));
-  }
-
-  Widget _buildBottomSheet() => Column(children: [
-        Center(
-          child: StatefulBuilder(
-            builder: (_, setState) => NumberPicker(
-              axis: Axis.horizontal,
-              minValue: 0,
-              maxValue: 50,
-              value: _pickerValue,
-              onChanged: (value) => setState(() => _pickerValue = value),
-            ),
-          ),
-        ),
-        AddDeleteButtons(
-          onAdd: _onAdd,
-          onDelete: _onDelete,
-          deleteText: _pickerValue > 0 && TableService.to.tables.isNotEmpty
-              ? "Löschen"
-              : "Abbrechen",
-        ),
-      ]);
-
-  void _onAdd() async {
-    await TableService.to.addNTables(_pickerValue);
-    Get.back();
-  }
-
-  void _onDelete() {
-    if (TableService.to.tables.isEmpty || _pickerValue == 0) {
-      return;
-    }
-
-    Utils.showConfirmDialog(
-      "Möchten Sie die Tische wirklich löschen?",
-      () async => await TableService.to.deleteNTables(_pickerValue),
-    );
   }
 }

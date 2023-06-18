@@ -1,31 +1,33 @@
 class TableGroup {
   final String id;
-  final String name;
+  String name;
   late final List<Table> tables;
 
-  TableGroup({required this.id, required this.name, required number})
-      : tables = List<Table>.generate(
-          number,
-          (index) => Table(number: index + 1),
-        );
+  TableGroup({required this.id, required this.name, required size}) {
+    tables = List<Table>.generate(
+      size,
+      (idx) => Table(group: this, number: idx + 1),
+    );
+  }
 
   factory TableGroup.fromJson(String id, Map<String, dynamic> json) =>
       TableGroup(
         id: id,
         name: json["name"],
-        number: json["number"],
+        size: json["size"],
       );
 
   Map<String, dynamic> toJson() => {
         "name": name,
-        "number": tables.length,
+        "size": tables.length,
       };
 }
 
 class Table {
+  final TableGroup group;
   final int number;
 
-  Table({required this.number});
+  Table({required this.group, required this.number});
 
   String get name => "Tisch $number";
 }

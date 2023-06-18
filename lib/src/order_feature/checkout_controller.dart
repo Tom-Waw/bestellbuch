@@ -1,10 +1,10 @@
 import 'package:get/get.dart';
 
-import '../auth/auth_service.dart';
+import '../services/auth_service.dart';
 import '../menu_feature/menu.dart';
 import '../tables_feature/table.dart';
 import 'order.dart';
-import 'order_service.dart';
+import '../services/order_service.dart';
 
 class CheckoutController extends GetxController {
   static CheckoutController get to => Get.find<CheckoutController>();
@@ -32,34 +32,58 @@ class CheckoutController extends GetxController {
     }
 
     _order.value = order;
-  }
 
-  void addItem(Product product) {
-    _order.update((val) {
-      val?.items.update(product, (count) => count + 1, ifAbsent: () => 1);
+    ever(OrderService.to.activeOrders, (orders) async {
+      if (_order.value == null) return;
+
+      Order? order = orders.firstWhereOrNull(
+        (o) => o.id == _order.value?.id,
+      );
+
+      if (order == null) {
+        await OrderService.to.cancelOrder(_order.value!);
+        Get.back();
+      } else {
+        _order.value = order;
+      }
     });
-    OrderService.to.updateOrder(current);
   }
 
-  void removeItem(Product product) {
-    _order.update((val) {
-      if (val?.items[product] == 1) return removeProduct(product);
+  Future<void> addItem(Product product) async {
+    _order.update((val) async {
+      // val?.items.update(product, (count) => count + 1, ifAbsent: () => 1);
+      Product? key =
+          val?.items.keys.toList().firstWhereOrNull((p) => p.id == product.id);
+      if (key == null) {
+        val?.items[product] = 1;
+      } else {
+        val?.items.update(key, (value) => value + 1);
+      }
+      await OrderService.to.updateOrder(current);
+    });
+  }
+
+  Future<void> removeItem(Product product) async {
+    _order.update((val) async {
+      if (val?.items[product] == 1) return await removeProduct(product);
       val?.items.update(product, (count) => count - 1);
+
+      await OrderService.to.updateOrder(current);
     });
-    OrderService.to.updateOrder(current);
   }
 
-  void removeProduct(Product product) {
-    _order.update((val) {
+  Future<void> removeProduct(Product product) async {
+    _order.update((val) async {
       val?.items.remove(product);
+
+      await OrderService.to.updateOrder(current);
     });
-    OrderService.to.updateOrder(current);
   }
 
   Future<void> checkout() async {
-    _order.update((val) {
+    _order.update((val) async {
       val?.active = false;
+      await OrderService.to.updateOrder(current);
     });
-    OrderService.to.updateOrder(current);
   }
 }

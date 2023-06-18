@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'menu.dart';
-import 'menu_service.dart';
+import '../services/menu_service.dart';
 
 class MenuNavController extends GetxController
     with GetSingleTickerProviderStateMixin {
@@ -11,29 +11,20 @@ class MenuNavController extends GetxController
   final _menus = MenuService.to.menus;
   late final TabController controller;
 
-  final RxList<String> _idStack = <String>[].obs;
-  Menu? get current {
-    Menu? menu;
-    for (final id in _idStack) {
-      menu = (menu?.items ?? _menus)
-          .whereType<Menu>()
-          .toList()
-          .firstWhereOrNull((m) => m.id == id);
-      if (menu == null) break;
-    }
-    if (menu == null) _idStack.clear();
-    return menu;
-  }
+  final Rxn<Menu> _current = Rxn<Menu>();
+  Menu? get current => _current.value;
 
   @override
   void onInit() {
     super.onInit();
+    if (_menus.isNotEmpty) _current.value = _menus.first;
+
     controller = TabController(length: _menus.length, vsync: this);
-    if (_menus.isNotEmpty) open(_menus.first);
     controller.addListener(() {
       if (controller.indexIsChanging) open(_menus[controller.index]);
     });
-    _menus.listen((_) => _idStack.refresh());
+
+    ever(_menus, (_) => refreshCurrent());
   }
 
   @override
@@ -42,10 +33,25 @@ class MenuNavController extends GetxController
     super.onClose();
   }
 
-  List<String> menuToIdStack(Menu menu) =>
-      [if (!menu.isRoot) ...menuToIdStack(menu.parent!), menu.id];
+  void refreshCurrent() {
+    Menu? menu = _current.value;
+    List<String> ids = [];
+    while (menu != null) {
+      ids.add(menu.id);
+      menu = menu.parent;
+    }
 
-  void open(Menu menu) => _idStack.value = menuToIdStack(menu);
+    for (var id in ids.reversed) {
+      menu = (menu?.items.whereType<Menu>().toList() ?? _menus)
+          .firstWhereOrNull((m) => m.id == id);
+      if (menu == null) break;
+    }
 
-  void close() => _idStack.removeLast();
+    _current.value = menu;
+  }
+
+  void open(Menu menu) => _current.value = menu;
+
+  bool get canClose => _current.value?.isRoot == false;
+  void close() => _current.value = current!.parent;
 }

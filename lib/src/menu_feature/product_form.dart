@@ -7,7 +7,7 @@ import '../shared/form_error_message.dart';
 import '../shared/utils.dart';
 import 'menu.dart';
 import 'menu_nav_controller.dart';
-import 'menu_service.dart';
+import '../services/menu_service.dart';
 
 class ProductForm extends StatefulWidget {
   final Product? product;
@@ -83,16 +83,21 @@ class _ProductFormState extends State<ProductForm> {
     );
   }
 
-  void _onDelete() {
-    if (widget.product == null) {
-      Get.back();
-      return;
-    }
+  void _onDelete() async {
+    if (widget.product == null) return Get.back();
 
-    Utils.showConfirmDialog(
+    String? error;
+
+    await Utils.showConfirmDialog(
       "Möchten Sie den Artikel wirklich löschen?",
-      () async => await MenuService.to.deleteItem(widget.product!),
+      () async {
+        error = await MenuService.to.deleteItem(widget.product!);
+      },
     );
+
+    if (error != null) return setState(() => _error = error);
+
+    Get.back();
   }
 
   void _onAdd() async {
@@ -105,17 +110,14 @@ class _ProductFormState extends State<ProductForm> {
       widget.product!.price = double.parse(_priceController.text);
       error = await MenuService.to.updateItem(widget.product!);
     } else {
-      error = await MenuService.to.addProductTo(
+      error = await MenuService.to.addProduct(
         menu: MenuNavController.to.current!,
         name: _nameController.text,
         price: double.parse(_priceController.text),
       );
     }
 
-    if (error != null) {
-      setState(() => _error = error);
-      return;
-    }
+    if (error != null) return setState(() => _error = error);
 
     Get.back();
   }

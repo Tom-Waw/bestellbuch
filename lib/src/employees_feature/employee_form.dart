@@ -1,9 +1,9 @@
-import 'package:bestellbuch/src/employees_feature/employee.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../shared/form_error_message.dart';
-import 'employee_service.dart';
+import '../services/employee_service.dart';
+import 'employee.dart';
 
 class EmployeeForm extends StatefulWidget {
   final Employee? employee;
@@ -64,10 +64,7 @@ class _EmployeeFormState extends State<EmployeeForm> {
                   );
                 }
 
-                if (error != null) {
-                  setState(() => _error = error);
-                  return;
-                }
+                if (error != null) return setState(() => _error = error);
 
                 Get.back();
               }

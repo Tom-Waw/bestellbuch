@@ -30,11 +30,12 @@ class Menu extends MenuItem {
   Menu? get root => isRoot ? this : parent?.root;
 
   List<Product> get allProducts =>
-      items.whereType<Product>().toList(growable: false) +
-      items
-          .whereType<Menu>()
-          .expand((menu) => menu.allProducts)
-          .toList(growable: false);
+      items.whereType<Product>().toList() +
+      items.whereType<Menu>().expand((menu) => menu.allProducts).toList();
+
+  List<Menu> get allMenus =>
+      items.whereType<Menu>().toList() +
+      items.whereType<Menu>().expand((menu) => menu.allMenus).toList();
 
   factory Menu.fromJson(String id, Map<String, dynamic> json) => Menu(
         id: id,

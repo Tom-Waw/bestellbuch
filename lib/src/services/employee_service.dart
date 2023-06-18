@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 
-import '../order_feature/order_service.dart';
-import 'employee.dart';
+import 'order_service.dart';
+import '../employees_feature/employee.dart';
 
 class EmployeeService extends GetxController {
   final _ref = FirebaseFirestore.instance.collection("Employees");

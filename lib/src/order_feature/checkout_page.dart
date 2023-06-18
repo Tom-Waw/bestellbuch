@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 
+import '../shared/utils.dart';
 import 'checkout_controller.dart';
 import 'order.dart';
-import 'order_service.dart';
+import '../services/order_service.dart';
 import '../routes.dart';
 
 class CheckoutPage extends StatelessWidget {
@@ -26,11 +27,18 @@ class CheckoutPage extends StatelessWidget {
                   icon: const Icon(Icons.add),
                   onPressed: () async {
                     Product product = await Get.toNamed(Routes.menu);
-                    CheckoutController.to.addItem(product);
+                    await CheckoutController.to.addItem(product);
                   },
                 ),
                 IconButton(
-                    onPressed: () => _confirmDeleteDialog(),
+                    onPressed: () => Utils.showConfirmDialog(
+                          "Willst du diese Bestellung wirklich löschen?",
+                          () async {
+                            await OrderService.to
+                                .cancelOrder(CheckoutController.to.current);
+                            Get.back(closeOverlays: true);
+                          },
+                        ),
                     icon: const Icon(Icons.delete)),
               ],
             ),
@@ -46,20 +54,6 @@ class CheckoutPage extends StatelessWidget {
           ));
   }
 
-  Future<void> _confirmDeleteDialog() => Get.defaultDialog(
-        title: "Willst du diese Bestellung wirklich löschen?",
-        titlePadding: const EdgeInsets.fromLTRB(25.0, 25.0, 25.0, 0.0),
-        middleText: "Diese Aktion kann nicht rückgängig gemacht werden.",
-        content: const SizedBox(height: 0.0),
-        contentPadding: const EdgeInsets.only(bottom: 20.0),
-        onConfirm: () {
-          OrderService.to.cancelOrder(CheckoutController.to.current);
-          Get.back(closeOverlays: true);
-        },
-        buttonColor: Colors.red,
-        confirmTextColor: Colors.white,
-      );
-
   Widget _buildCheckoutItem(Product product, int amount) {
     return Slidable(
       key: ValueKey(product.name),
@@ -67,13 +61,16 @@ class CheckoutPage extends StatelessWidget {
         motion: const ScrollMotion(),
         children: [
           SlidableAction(
-            onPressed: (_) => CheckoutController.to.addItem(product),
+            onPressed: (_) async =>
+                await CheckoutController.to.addItem(product),
+            autoClose: false,
             label: "Erhöhen",
             icon: Icons.add,
             backgroundColor: Colors.green,
           ),
           SlidableAction(
-            onPressed: (_) => CheckoutController.to.removeItem(product),
+            onPressed: (_) async =>
+                await CheckoutController.to.removeItem(product),
             autoClose: false,
             label: "Verringern",
             icon: Icons.remove,
@@ -85,11 +82,11 @@ class CheckoutPage extends StatelessWidget {
       endActionPane: ActionPane(
         motion: const ScrollMotion(),
         dismissible: DismissiblePane(
-          onDismissed: () => CheckoutController.to.removeProduct(product),
+          onDismissed: () => _onDelete(product),
         ),
         children: [
           SlidableAction(
-            onPressed: (_) => CheckoutController.to.removeProduct(product),
+            onPressed: (_) => _onDelete(product),
             label: "Löschen",
             icon: Icons.delete,
             backgroundColor: Colors.red,
@@ -109,6 +106,11 @@ class CheckoutPage extends StatelessWidget {
       ),
     );
   }
+
+  void _onDelete(Product product) => Utils.showConfirmDialog(
+        "Wollen Sie das Produkt wirklich löschen?",
+        () async => await CheckoutController.to.removeProduct(product),
+      );
 
   Widget _buildFooter(Order order) {
     return Container(
@@ -131,8 +133,8 @@ class CheckoutPage extends StatelessWidget {
               foregroundColor: Colors.white,
               backgroundColor: Colors.green,
             ),
-            onPressed: () {
-              CheckoutController.to.checkout();
+            onPressed: () async {
+              await CheckoutController.to.checkout();
               Get.back();
               // TODO: print order
             },

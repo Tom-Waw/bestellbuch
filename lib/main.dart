@@ -3,12 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
 
 import 'firebase_options.dart';
-import 'src/auth/auth_service.dart';
-import 'src/employees_feature/employee_service.dart';
-import 'src/menu_feature/menu_service.dart';
-import 'src/order_feature/order_service.dart';
 import 'src/routes.dart';
-import 'src/tables_feature/table_service.dart';
 
 void main() async {
   // Initialize Firestore
@@ -27,17 +22,11 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-        title: "Bestellbuch",
-        navigatorKey: GlobalKey(debugLabel: "app"),
-        theme: ThemeData(),
-        getPages: getPages,
-        initialRoute: Routes.initial,
-        initialBinding: BindingsBuilder(() {
-          Get.put(EmployeeService(), permanent: true);
-          Get.put(TableService(), permanent: true);
-          Get.put(MenuService(), permanent: true);
-          Get.put(OrderService(), permanent: true);
-          Get.put(AuthService(), permanent: true);
-        }));
+      title: "Bestellbuch",
+      navigatorKey: GlobalKey(debugLabel: "app"),
+      theme: ThemeData(),
+      getPages: getPages,
+      initialRoute: Routes.splash,
+    );
   }
 }

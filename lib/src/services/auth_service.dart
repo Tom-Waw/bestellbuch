@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
 import '../employees_feature/employee.dart';
-import '../employees_feature/employee_service.dart';
+import 'employee_service.dart';
 import '../routes.dart';
 
 class AuthService extends GetxService {
@@ -22,13 +22,23 @@ class AuthService extends GetxService {
     firebaseUser = _auth.currentUser.obs;
     firebaseUser.bindStream(_auth.userChanges());
     ever(firebaseUser, (user) {
-      if (user == null && Get.currentRoute != Routes.login) {
+      if (user == null &&
+          Get.currentRoute != Routes.login &&
+          Get.currentRoute != Routes.splash) {
         Get.offAllNamed(Routes.login);
       }
     });
     ever(_employee, (employee) {
-      if (employee == null && Get.currentRoute != Routes.login) {
+      if (employee == null &&
+          Get.currentRoute != Routes.login &&
+          Get.currentRoute != Routes.splash) {
         Get.offAllNamed(Routes.login);
+      }
+    });
+    ever(EmployeeService.to.employees, (employees) {
+      if (isLoggedIn) {
+        _employee.value = employees
+            .firstWhere((employee) => employee.id == _employee.value!.id);
       }
     });
   }

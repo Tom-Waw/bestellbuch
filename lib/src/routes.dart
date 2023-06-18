@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 
 import 'auth/login_page.dart';
 
+import 'auth/splash_screen.dart';
 import 'menu_feature/menu_nav_controller.dart';
 import 'menu_feature/menu_page.dart';
 
@@ -13,6 +14,7 @@ import 'tables_feature/tables_page.dart';
 import 'employees_feature/employees_page.dart';
 
 class Routes {
+  static String splash = '/splash';
   static String initial = login;
   static String login = '/login';
   static String home = '/home';
@@ -24,6 +26,7 @@ class Routes {
 }
 
 final getPages = [
+  GetPage(name: Routes.splash, page: () => const SplashScreen()),
   GetPage(
     name: Routes.login,
     page: () => const LoginPage(),

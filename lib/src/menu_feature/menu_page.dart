@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart' hide MenuController;
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
-import '../auth/auth_service.dart';
+import '../services/auth_service.dart';
 import '../shared/utils.dart';
 import 'menu.dart';
 import 'menu_form.dart';
 import 'menu_item_box.dart';
 import 'menu_nav_controller.dart';
-import 'menu_service.dart';
+import '../services/menu_service.dart';
 import 'product_form.dart';
 
 class MenuPage extends StatefulWidget {
@@ -32,7 +31,7 @@ class _MenuPageState extends State<MenuPage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        if (!(MenuNavController.to.current?.isRoot ?? false))
+                        if (MenuNavController.to.canClose)
                           IconButton(
                             icon: const Icon(Icons.keyboard_arrow_up),
                             onPressed: () => MenuNavController.to.close(),
@@ -50,7 +49,7 @@ class _MenuPageState extends State<MenuPage> {
                   onPressed: () => setState(() => _editMode = !_editMode),
                 ),
                 IconButton(
-                  icon: const Icon(FontAwesomeIcons.plus),
+                  icon: const Icon(Icons.add),
                   onPressed: () => Utils.showBottomSheet(
                     "Menü erweitern",
                     _buildBottomSheetTabBarView(),

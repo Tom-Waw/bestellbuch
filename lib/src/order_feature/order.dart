@@ -1,14 +1,14 @@
 import '../employees_feature/employee.dart';
-import '../employees_feature/employee_service.dart';
+import '../services/employee_service.dart';
 import '../menu_feature/menu.dart';
-import '../menu_feature/menu_service.dart';
+import '../services/menu_service.dart';
 import '../tables_feature/table.dart';
-import '../tables_feature/table_service.dart';
+import '../services/table_service.dart';
 
 class Order {
   final String id;
   Table table;
-  final Employee waiter;
+  Employee waiter;
   bool active;
   final Map<Product, int> items;
 
@@ -28,8 +28,10 @@ class Order {
 
   factory Order.fromJson(String id, Map<String, dynamic> json) => Order(
         id: id,
-        table: TableService.to.tables.firstWhere(
-          (t) => t.number == json["table"],
+        table: TableService.to.allTables.firstWhere(
+          (t) =>
+              t.group.id == json["table"].split("@")[0] &&
+              t.number == int.parse(json["table"].split("@")[1]),
         ),
         waiter: EmployeeService.to.employees.firstWhere(
           (e) => e.id == json["waiter"],
@@ -37,22 +39,20 @@ class Order {
         active: json["active"],
         items: <Product, int>{
           for (var item in json["items"])
-            MenuService.to.menus
-                    .expand((menu) => menu.allProducts)
-                    .firstWhere((product) => product.id == item["product"]):
-                item["count"]
+            MenuService.to.allProducts
+                .firstWhere((p) => p.id == item["product"]): item["count"]
         },
       );
 
   Map<String, dynamic> toJson() => {
-        "table": table.number,
+        "table": "${table.group.id}@${table.number}",
         "waiter": waiter.id,
         "active": active,
         "items": [
           for (var entry in items.entries)
             {
-              "count": entry.value,
               "product": entry.key.id,
+              "count": entry.value,
             }
         ],
       };

@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:get/get.dart';
 
 import '../shared/utils.dart';
 import 'employee.dart';
 import 'employee_form.dart';
-import 'employee_service.dart';
+import '../services/employee_service.dart';
 
 class EmployeeListItem extends StatelessWidget {
   final Employee employee;
@@ -16,14 +15,16 @@ class EmployeeListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: Slidable(
-        key: const ValueKey(0),
+        key: ValueKey(employee.name),
         endActionPane: ActionPane(motion: const ScrollMotion(), children: [
           SlidableAction(
             label: "Löschen",
             backgroundColor: Colors.red,
             foregroundColor: Colors.white,
             icon: Icons.delete,
-            onPressed: (_) => _showDeleteDialog(),
+            onPressed: (_) => Utils.showConfirmDialog(
+                "Willst du diesen Benutzer wirklich löschen?",
+                () => EmployeeService.to.deleteEmployee(employee)),
           ),
           SlidableAction(
             label: "Bearbeiten",
@@ -46,21 +47,6 @@ class EmployeeListItem extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-
-  void _showDeleteDialog() {
-    Get.defaultDialog(
-      title: "Willst du diesen Benutzer wirklich löschen?",
-      titlePadding: const EdgeInsets.all(25.0).copyWith(bottom: 0.0),
-      content: const SizedBox.shrink(),
-      contentPadding: const EdgeInsets.all(25.0),
-      onConfirm: () {
-        EmployeeService.to.deleteEmployee(employee);
-        Get.back();
-      },
-      buttonColor: Colors.red,
-      confirmTextColor: Colors.white,
     );
   }
 }
