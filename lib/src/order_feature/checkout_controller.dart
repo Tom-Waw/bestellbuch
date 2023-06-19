@@ -22,7 +22,7 @@ class CheckoutController extends GetxController {
     Table table = Get.arguments;
     Order order = await OrderService.to.getOrCreateOrder(table);
 
-    if (order.waiter != AuthService.to.employee) {
+    if (order.waiter != AuthService.to.currentUser) {
       Get.snackbar(
         "Error",
         "Table already opened by ${order.waiter.name}",

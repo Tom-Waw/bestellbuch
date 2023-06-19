@@ -44,7 +44,7 @@ class OrderService extends GetxController {
     order = Order(
       id: id,
       tableId: "${table.group.id}@${table.number}",
-      waiterId: AuthService.to.employee,
+      waiterId: AuthService.to.currentUser,
     );
     await _ref.add(order.toJson());
     return activeOrders.firstWhere((order) => order.table == table);

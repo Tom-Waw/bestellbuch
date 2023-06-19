@@ -3,10 +3,6 @@ import 'package:get/get.dart';
 
 import '../routes.dart';
 import '../services/auth_service.dart';
-import '../services/employee_service.dart';
-import '../services/menu_service.dart';
-import '../services/order_service.dart';
-import '../services/table_service.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -23,13 +19,11 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void _initServices() async {
-    Get.put(EmployeeService(), permanent: true);
-    Get.put(TableService(), permanent: true);
-    await Get.putAsync(MenuService().init, permanent: true);
-    Get.put(OrderService(), permanent: true);
-    Get.put(AuthService(), permanent: true);
+    await Future.doWhile(() => !Get.isRegistered<AuthService>());
 
-    Get.offAllNamed(Routes.initial);
+    Future.delayed(Duration.zero, () {
+      Get.offAllNamed(Routes.initial);
+    });
   }
 
   @override

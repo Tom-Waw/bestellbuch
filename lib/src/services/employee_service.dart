@@ -30,8 +30,9 @@ class EmployeeService extends GetxController {
 
   String? _checkName(String name, {Employee? employee}) {
     if (name.isEmpty) return "Bitte geben Sie einen Namen an";
-    if (employees
-        .any((employee) => employee.name == name && employee != employee)) {
+    if (employees.any(
+      (employee) => employee.name == name && employee != employee,
+    )) {
       return "Mitarbeiter mit diesem Namen existiert bereits";
     }
     return null;
@@ -58,8 +59,7 @@ class EmployeeService extends GetxController {
   }
 
   Future<String?> deleteEmployee(Employee employee) async {
-    if (OrderService.to.activeOrders.any((order) => order.waiter == employee)) {
-      print("Fehler");
+    if (OrderService.to.activeOrders.any((o) => o.waiter == employee)) {
       return "Mitarbeiter hat noch aktive Bestellungen";
     }
     await _ref.doc(employee.id).delete();

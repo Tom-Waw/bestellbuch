@@ -7,14 +7,9 @@ import '../services/table_service.dart';
 import 'table_form.dart';
 import 'table_list_item.dart';
 
-class TablesPage extends StatefulWidget {
+class TablesPage extends StatelessWidget {
   const TablesPage({super.key});
 
-  @override
-  State<TablesPage> createState() => _TablesPageState();
-}
-
-class _TablesPageState extends State<TablesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -10,25 +10,18 @@ class AuthService extends GetxService {
 
   static AuthService get to => Get.find<AuthService>();
 
-  late final Rx<User?> firebaseUser;
-
-  final Rxn<String> _employeeId = Rxn<String>();
+  late final Rx<User?> _admin;
+  final RxnString _currentUserId = RxnString();
 
   @override
   void onInit() async {
     super.onInit();
 
-    firebaseUser = _auth.currentUser.obs;
-    firebaseUser.bindStream(_auth.userChanges());
+    _admin = _auth.currentUser.obs;
+    _admin.bindStream(_auth.userChanges());
 
-    ever(firebaseUser, _onAuthStateChanged);
-    ever(_employeeId, _onAuthStateChanged);
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
-    firebaseUser.close();
+    ever(_admin, _onAuthStateChanged);
+    ever(_currentUserId, _onAuthStateChanged);
   }
 
   void _onAuthStateChanged(dynamic user) {
@@ -39,22 +32,20 @@ class AuthService extends GetxService {
     }
   }
 
-  bool get isAdmin => firebaseUser.value != null;
+  bool get isAdmin => _admin.value != null;
+  bool get isLoggedIn => currentUser != null;
 
-  bool get isLoggedIn => _employeeId.value != null;
-  Employee get employee => EmployeeService.to.employees
-      .firstWhere((e) => e.id == _employeeId.value!);
+  Employee? get currentUser => EmployeeService.to.employees
+      .firstWhereOrNull((e) => e.id == _currentUserId.value);
 
   void loginAsEmployee(Employee employee) {
-    employee.active = true;
-    EmployeeService.to.updateEmployee(employee);
-    _employeeId.value = employee.id;
+    _currentUserId.value ??= employee.id;
   }
 
   Future<String?> loginAsAdmin(String name, String password) async {
     try {
       await _auth.signInWithEmailAndPassword(
-        email: "$name@user.com",
+        email: "$name@admin.com",
         password: password,
       );
     } on FirebaseAuthException catch (e) {
@@ -65,13 +56,8 @@ class AuthService extends GetxService {
     return null;
   }
 
-  Future<void> logout() async {
-    await _auth.signOut();
-
-    if (isLoggedIn) {
-      employee.active = false;
-      EmployeeService.to.updateEmployee(employee);
-      _employeeId.value = null;
-    }
+  void logout() {
+    _auth.signOut();
+    _currentUserId.value = null;
   }
 }

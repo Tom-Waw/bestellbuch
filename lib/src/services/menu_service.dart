@@ -8,7 +8,7 @@ import 'order_service.dart';
 
 // A class to read and update menu.
 class MenuService extends GetxService {
-  final _ref = FirebaseFirestore.instance.collection("Menu");
+  final _ref = FirebaseFirestore.instance.collection("Menus");
   final _streamSubscriptions =
       <StreamSubscription<QuerySnapshot<Map<String, dynamic>>>>[];
 
@@ -19,10 +19,11 @@ class MenuService extends GetxService {
   List<Menu> get allMenus => menus.expand((m) => m.allMenus).toList();
   List<Product> get allProducts => menus.expand((m) => m.allProducts).toList();
 
-  Future<MenuService> init() async {
+  @override
+  void onInit() async {
+    super.onInit();
     await _reloadMenus();
     _ref.snapshots().listen((_) => _reloadMenus());
-    return this;
   }
 
   @override
@@ -46,7 +47,7 @@ class MenuService extends GetxService {
 
   Future<List<MenuItem>> _fetchMenus(
           QuerySnapshot<Map<String, dynamic>> ref) async =>
-      Future.wait(ref.docs.map((doc) async {
+      _sortItems(await Future.wait(ref.docs.map((doc) async {
         final data = doc.data();
 
         final innerRef = doc.reference.collection("items");
@@ -58,7 +59,16 @@ class MenuService extends GetxService {
         }
 
         return MenuItem.fromJson(doc.id, data);
-      }).toList());
+      })));
+
+  List<MenuItem> _sortItems(List<MenuItem> items) {
+    int compare(MenuItem a, MenuItem b) => a.name.compareTo(b.name);
+
+    return [
+      ...items.whereType<Menu>().toList()..sort(compare),
+      ...items.whereType<Product>().toList()..sort(compare),
+    ];
+  }
 
   String? _checkName(String name, {MenuItem? item}) {
     if (name.isEmpty) return "Bitte geben Sie einen Namen an";

@@ -3,11 +3,10 @@ import 'package:get/get.dart';
 
 import '../services/auth_service.dart';
 import '../shared/utils.dart';
-import 'menu.dart';
+import '../services/menu_service.dart';
 import 'menu_form.dart';
 import 'menu_item_box.dart';
 import 'menu_nav_controller.dart';
-import '../services/menu_service.dart';
 import 'product_form.dart';
 
 class MenuPage extends StatefulWidget {
@@ -24,21 +23,23 @@ class _MenuPageState extends State<MenuPage> {
   Widget build(BuildContext context) {
     return Obx(() => Scaffold(
           appBar: AppBar(
-            title: Obx(() => MenuNavController.to.current?.isRoot ?? true
+            title: Obx(() => !MenuNavController.to.canClose
                 ? const Text("Menü")
-                : SizedBox(
-                    width: double.infinity,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        if (MenuNavController.to.canClose)
-                          IconButton(
-                            icon: const Icon(Icons.keyboard_arrow_up),
-                            onPressed: () => MenuNavController.to.close(),
-                          ),
-                        Text(MenuNavController.to.current!.name),
-                      ],
-                    ),
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        onPressed: () => MenuNavController.to.close(),
+                        icon: const Icon(Icons.keyboard_arrow_up),
+                      ),
+                      Flexible(
+                        fit: FlexFit.loose,
+                        child: Text(
+                          MenuNavController.to.current!.name,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
                   )),
             centerTitle: true,
             actions: [
@@ -71,7 +72,7 @@ class _MenuPageState extends State<MenuPage> {
                   crossAxisCount: 3,
                   crossAxisSpacing: 8.0,
                   mainAxisSpacing: 8.0,
-                  children: _sortItems(MenuNavController.to.current!.items)
+                  children: MenuNavController.to.current!.items
                       .map((item) => MenuItemBox(
                             item: item,
                             editable: _editMode,
@@ -81,18 +82,6 @@ class _MenuPageState extends State<MenuPage> {
                       .toList(),
                 )),
         ));
-  }
-
-  List<MenuItem> _sortItems(List<MenuItem> items) {
-    int sort(MenuItem a, MenuItem b) => a.name.compareTo(b.name);
-
-    List<Menu> menus = items.whereType<Menu>().toList();
-    List<Product> products = items.whereType<Product>().toList();
-
-    return [
-      ...menus..sort(sort),
-      ...products..sort(sort),
-    ];
   }
 
   Widget _buildBottomSheetTabBarView() {
