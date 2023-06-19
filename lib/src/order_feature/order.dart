@@ -14,8 +14,8 @@ class Order {
 
   Order({
     required this.id,
-    required tableId,
-    required waiterId,
+    required String tableId,
+    required String waiterId,
     this.active = true,
     items,
   })  : _tableId = tableId,

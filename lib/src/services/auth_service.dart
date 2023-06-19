@@ -33,10 +33,10 @@ class AuthService extends GetxService {
   }
 
   bool get isAdmin => _admin.value != null;
-  bool get isLoggedIn => currentUser != null;
+  bool get isLoggedIn => _currentUserId.value != null;
 
-  Employee? get currentUser => EmployeeService.to.employees
-      .firstWhereOrNull((e) => e.id == _currentUserId.value);
+  Employee get currentUser => EmployeeService.to.employees
+      .firstWhere((e) => e.id == _currentUserId.value);
 
   void loginAsEmployee(Employee employee) {
     _currentUserId.value ??= employee.id;
