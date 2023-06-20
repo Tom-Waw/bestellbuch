@@ -49,6 +49,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '192306945627',
     projectId: 'bestellbuchmanager',
     authDomain: 'bestellbuchmanager.firebaseapp.com',
+    databaseURL: 'https://bestellbuchmanager-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'bestellbuchmanager.appspot.com',
   );
 
@@ -57,17 +58,19 @@ class DefaultFirebaseOptions {
     appId: '1:192306945627:android:7685161eb8b1902f98e97e',
     messagingSenderId: '192306945627',
     projectId: 'bestellbuchmanager',
+    databaseURL: 'https://bestellbuchmanager-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'bestellbuchmanager.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyBPPnFVYHPl05BEuddMtkRRYuc_jXXA2Ak',
-    appId: '1:192306945627:ios:f7a01a6fc5b7561698e97e',
+    appId: '1:192306945627:ios:a0e452b8a26682b998e97e',
     messagingSenderId: '192306945627',
     projectId: 'bestellbuchmanager',
+    databaseURL: 'https://bestellbuchmanager-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'bestellbuchmanager.appspot.com',
-    iosClientId: '192306945627-sfief9c9sv6929r16clnn1ak7atgj7uc.apps.googleusercontent.com',
-    iosBundleId: 'com.shahaab.bestellbuch',
+    iosClientId: '192306945627-ravqdvfe8nqkiu16m8b3lpj7b5ptrpk8.apps.googleusercontent.com',
+    iosBundleId: 'com.shahaab.bestellbuchAlt',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
@@ -75,6 +78,7 @@ class DefaultFirebaseOptions {
     appId: '1:192306945627:ios:5e223c446478727198e97e',
     messagingSenderId: '192306945627',
     projectId: 'bestellbuchmanager',
+    databaseURL: 'https://bestellbuchmanager-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'bestellbuchmanager.appspot.com',
     iosClientId: '192306945627-b7e5i96ngd94293328mp7dlgs0q0de4t.apps.googleusercontent.com',
     iosBundleId: 'com.shahaab.bestellbuch.RunnerTests',

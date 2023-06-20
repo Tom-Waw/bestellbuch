@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "192306945627",
+    "firebase_url": "https://bestellbuchmanager-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "bestellbuchmanager",
+    "storage_bucket": "bestellbuchmanager.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:192306945627:android:7685161eb8b1902f98e97e",
+        "android_client_info": {
+          "package_name": "com.shahaab.bestellbuch"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "192306945627-nfomjo0finidk4tgo5qk5992nf9shifh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBOM9ppyvRVd8MZTI-K-vwjOYwf7mvj44U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "192306945627-nfomjo0finidk4tgo5qk5992nf9shifh.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "192306945627-b7e5i96ngd94293328mp7dlgs0q0de4t.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.shahaab.bestellbuch.RunnerTests"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
