@@ -1,3 +1,5 @@
+import '../services/order_service.dart';
+
 class TableGroup {
   final String id;
   String name;
@@ -30,4 +32,6 @@ class Table {
   Table({required this.group, required this.number});
 
   String get name => "Tisch $number";
+
+  bool get isAvailable => OrderService.to.orders.every((o) => o.table != this);
 }

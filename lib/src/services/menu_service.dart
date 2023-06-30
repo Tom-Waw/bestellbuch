@@ -9,8 +9,6 @@ import 'order_service.dart';
 // A class to read and update menu.
 class MenuService extends GetxService {
   final _ref = FirebaseFirestore.instance.collection("Menus");
-  final _streamSubscriptions =
-      <StreamSubscription<QuerySnapshot<Map<String, dynamic>>>>[];
 
   static MenuService get to => Get.find<MenuService>();
 
@@ -22,52 +20,29 @@ class MenuService extends GetxService {
   @override
   void onInit() async {
     super.onInit();
-    await _reloadMenus();
-    _ref.snapshots().listen((_) => _reloadMenus());
+    menus.bindStream(_dbStream());
   }
 
-  @override
-  void onClose() {
-    super.onClose();
-    for (var sub in _streamSubscriptions) {
-      sub.cancel();
-    }
-    _streamSubscriptions.clear();
-    menus.close();
-  }
+  Stream<List<Menu>> _dbStream() => _ref.snapshots().map(
+        (snapshot) => structureData(snapshot.docs).whereType<Menu>().toList(),
+      );
 
-  Future<void> _reloadMenus() async {
-    for (var sub in _streamSubscriptions) {
-      sub.cancel();
-    }
-    _streamSubscriptions.clear();
-    final fetchedMenus = await _fetchMenus(await _ref.get());
-    menus.value = fetchedMenus.cast<Menu>();
-  }
+  List<MenuItem> structureData(
+    List<QueryDocumentSnapshot<Map<String, dynamic>>> remaining, [
+    Menu? parent,
+  ]) {
+    final docs =
+        List.from(remaining.where((d) => d.data()["parent"] == parent?.id));
+    docs.forEach(remaining.remove);
 
-  Future<List<MenuItem>> _fetchMenus(
-          QuerySnapshot<Map<String, dynamic>> ref) async =>
-      _sortItems(await Future.wait(ref.docs.map((doc) async {
-        final data = doc.data();
+    List<MenuItem> items =
+        docs.map((d) => MenuItem.fromJson(d.id, parent, d.data())).toList();
+    items.sort();
 
-        final innerRef = doc.reference.collection("items");
-        final snapshot = await innerRef.get();
-        if (snapshot.size > 0) {
-          data["items"] = await _fetchMenus(snapshot);
-          final sub = innerRef.snapshots().listen((_) => _reloadMenus());
-          _streamSubscriptions.add(sub);
-        }
-
-        return MenuItem.fromJson(doc.id, data);
-      })));
-
-  List<MenuItem> _sortItems(List<MenuItem> items) {
-    int compare(MenuItem a, MenuItem b) => a.name.compareTo(b.name);
-
-    return [
-      ...items.whereType<Menu>().toList()..sort(compare),
-      ...items.whereType<Product>().toList()..sort(compare),
-    ];
+    return items
+      ..whereType<Menu>().forEach(
+        (menu) => menu.items.addAll(structureData(List.from(remaining), menu)),
+      );
   }
 
   String? _checkName(String name, {MenuItem? item}) {
@@ -90,14 +65,11 @@ class MenuService extends GetxService {
 
     Product product = Product(
       id: _ref.doc().id,
+      parent: menu,
       name: name,
       price: price,
     );
-    await _ref
-        .doc(menu.path)
-        .collection("items")
-        .doc(product.id)
-        .set(product.toJson());
+    await _ref.doc(product.id).set(product.toJson());
     return null;
   }
 
@@ -108,17 +80,10 @@ class MenuService extends GetxService {
 
     Menu menu = Menu(
       id: _ref.doc().id,
+      parent: parent,
       name: name,
     );
-    if (parent != null) {
-      await _ref
-          .doc(parent.path)
-          .collection("items")
-          .doc(menu.id)
-          .set(menu.toJson());
-    } else {
-      await _ref.doc(menu.id).set(menu.toJson());
-    }
+    await _ref.doc(menu.id).set(menu.toJson());
     return null;
   }
 
@@ -127,7 +92,7 @@ class MenuService extends GetxService {
     String? error = _checkName(item.name, item: item);
     if (error != null) return error;
 
-    await _ref.doc(item.path).set(item.toJson());
+    await _ref.doc(item.id).set(item.toJson());
     return null;
   }
 
@@ -136,20 +101,20 @@ class MenuService extends GetxService {
     if (item == null || menus.contains(item)) return null;
 
     if (item is Product &&
-        OrderService.to.activeOrders.any(
+        OrderService.to.orders.any(
           (o) => o.items.keys.contains(item),
         )) {
       return "Dieses Produkt wird noch in einer aktiven Bestellung verwendet";
     }
 
     if (item is Menu &&
-        OrderService.to.activeOrders.any(
+        OrderService.to.orders.any(
           (o) => item.allProducts.any((p) => o.items.keys.contains(p)),
         )) {
       return "Produkte aus diesem Menü werden noch in einer aktiven Bestellung verwendet";
     }
 
-    await _ref.doc(item.path).delete();
+    await _ref.doc(item.id).delete();
     return null;
   }
 }

@@ -39,6 +39,14 @@ class MenuItemBox extends StatelessWidget {
                   (item as Product).price.toStringAsFixed(2),
                   textAlign: TextAlign.center,
                 ),
+              ] else ...[
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text((item as Menu).allProducts.length.toString()),
+                  ),
+                ),
               ],
             ],
           ),
@@ -55,18 +63,11 @@ class MenuItemBox extends StatelessWidget {
             ? MenuForm(menu: item as Menu)
             : ProductForm(product: item as Product),
       );
-      exitEditMode?.call();
-      return;
+      return exitEditMode?.call();
     }
 
-    if (item is Menu) {
-      MenuNavController.to.open(item as Menu);
-      return;
-    }
+    if (item is Menu) return MenuNavController.to.open(item as Menu);
 
-    if (Get.previousRoute == Routes.checkout) {
-      Get.back(result: item);
-      return;
-    }
+    if (Get.previousRoute == Routes.checkout) return Get.back(result: item);
   }
 }

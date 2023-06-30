@@ -24,7 +24,7 @@ class _AuthPageState extends State<AuthPage> {
     return Scaffold(
       appBar: AppBar(title: const Text("Authentifizierung")),
       body: Padding(
-        padding: const EdgeInsets.all(12.0),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 30.0),
         child: Form(
           key: _formKey,
           child: Column(

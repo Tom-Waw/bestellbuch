@@ -1,13 +1,14 @@
-import 'package:bestellbuch/src/menu_feature/menu.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Table;
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 
+import '../menu_feature/menu.dart';
+import '../routes.dart';
+import '../services/order_service.dart';
 import '../shared/utils.dart';
 import 'checkout_controller.dart';
 import 'order.dart';
-import '../services/order_service.dart';
-import '../routes.dart';
+import 'transfer_order_form.dart';
 
 class CheckoutPage extends StatelessWidget {
   const CheckoutPage({super.key});
@@ -17,40 +18,45 @@ class CheckoutPage extends StatelessWidget {
     return Obx(() => !CheckoutController.to.isReady
         ? Scaffold(
             appBar: AppBar(title: const Text("Bestellung")),
-            body: const CircularProgressIndicator(),
+            body: const Center(child: CircularProgressIndicator()),
           )
         : Scaffold(
             appBar: AppBar(
-              title: Text(CheckoutController.to.current.table.name),
+              title: Text(CheckoutController.to.order.table.name),
               actions: [
+                IconButton(
+                  onPressed: () => Utils.showBottomSheet(
+                    "Bestellung umbuchen",
+                    TransferOrderForm(order: CheckoutController.to.order),
+                  ),
+                  icon: const Icon(Icons.ios_share),
+                ),
                 IconButton(
                   icon: const Icon(Icons.add),
                   onPressed: () async {
                     Product product = await Get.toNamed(Routes.menu);
-                    await CheckoutController.to.addItem(product);
+                    CheckoutController.to.addItem(product);
                   },
                 ),
                 IconButton(
-                    onPressed: () => Utils.showConfirmDialog(
-                          "Willst du diese Bestellung wirklich löschen?",
-                          () async {
-                            await OrderService.to
-                                .cancelOrder(CheckoutController.to.current);
-                            Get.back(closeOverlays: true);
-                          },
-                        ),
-                    icon: const Icon(Icons.delete)),
+                  icon: const Icon(Icons.delete),
+                  onPressed: () => Utils.showConfirmDialog(
+                    "Willst du diese Bestellung mit allen Inhalten wirklich löschen?",
+                    () async => await OrderService.to
+                        .cancelOrder(CheckoutController.to.order),
+                  ),
+                )
               ],
             ),
             body: ListView.builder(
-              itemCount: CheckoutController.to.current.items.length,
+              itemCount: CheckoutController.to.order.items.length,
               itemBuilder: (_, index) {
-                MapEntry entry = CheckoutController.to.current.items.entries
-                    .elementAt(index);
+                MapEntry entry =
+                    CheckoutController.to.order.items.entries.elementAt(index);
                 return _buildCheckoutItem(entry.key, entry.value);
               },
             ),
-            bottomSheet: _buildFooter(CheckoutController.to.current),
+            bottomSheet: _buildFooter(CheckoutController.to.order),
           ));
   }
 
@@ -61,16 +67,14 @@ class CheckoutPage extends StatelessWidget {
         motion: const ScrollMotion(),
         children: [
           SlidableAction(
-            onPressed: (_) async =>
-                await CheckoutController.to.addItem(product),
+            onPressed: (_) async => CheckoutController.to.addItem(product),
             autoClose: false,
             label: "Erhöhen",
             icon: Icons.add,
             backgroundColor: Colors.green,
           ),
           SlidableAction(
-            onPressed: (_) async =>
-                await CheckoutController.to.removeItem(product),
+            onPressed: (_) async => CheckoutController.to.removeItem(product),
             autoClose: false,
             label: "Verringern",
             icon: Icons.remove,
@@ -101,7 +105,7 @@ class CheckoutPage extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        subtitle: Text("$amount x ${product.price.toStringAsFixed(2)}"),
+        subtitle: Text("$amount x ${product.price.toStringAsFixed(2)}€"),
         trailing: Text("${(product.price * amount).toStringAsFixed(2)}€"),
       ),
     );
@@ -109,7 +113,7 @@ class CheckoutPage extends StatelessWidget {
 
   void _onDelete(Product product) => Utils.showConfirmDialog(
         "Wollen Sie das Produkt wirklich löschen?",
-        () async => await CheckoutController.to.removeProduct(product),
+        () async => CheckoutController.to.removeProduct(product),
       );
 
   Widget _buildFooter(Order order) {
@@ -120,7 +124,7 @@ class CheckoutPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            "Gesamt: ${order.total.toStringAsFixed(2)}",
+            "Gesamt: ${order.total.toStringAsFixed(2)}€",
             style: const TextStyle(
               fontWeight: FontWeight.bold,
             ),

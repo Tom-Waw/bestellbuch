@@ -6,7 +6,7 @@ class Employee {
 
   Employee({required this.id, required this.name});
 
-  bool get active => OrderService.to.activeOrders.any((o) => o.waiter == this);
+  bool get isActive => OrderService.to.orders.any((o) => o.waiter == this);
 
   factory Employee.fromJson(String id, Map<String, dynamic> json) => Employee(
         id: id,

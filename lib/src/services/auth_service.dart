@@ -2,8 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
 import '../employees_feature/employee.dart';
-import 'employee_service.dart';
 import '../routes.dart';
+import 'employee_service.dart';
 
 class AuthService extends GetxService {
   final _auth = FirebaseAuth.instance;
@@ -13,6 +13,8 @@ class AuthService extends GetxService {
   late final Rx<User?> _admin;
   final RxnString _currentUserId = RxnString();
 
+  final List<Worker> _workers = [];
+
   @override
   void onInit() async {
     super.onInit();
@@ -20,8 +22,18 @@ class AuthService extends GetxService {
     _admin = _auth.currentUser.obs;
     _admin.bindStream(_auth.userChanges());
 
-    ever(_admin, _onAuthStateChanged);
-    ever(_currentUserId, _onAuthStateChanged);
+    _workers.addAll([
+      ever(_admin, _onAuthStateChanged),
+      ever(_currentUserId, _onAuthStateChanged),
+    ]);
+  }
+
+  @override
+  void onClose() {
+    for (var worker in _workers) {
+      worker.dispose();
+    }
+    super.onClose();
   }
 
   void _onAuthStateChanged(dynamic user) {

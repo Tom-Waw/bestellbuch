@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 
-import 'order_service.dart';
 import '../tables_feature/table.dart';
+import 'order_service.dart';
 
 /// A class to read and update the tables.
 class TableService extends GetxService {
@@ -60,7 +60,7 @@ class TableService extends GetxService {
     if (size <= group.tables.length) {
       bool test(Table t) => t.number > size;
       final tablesToDelete = group.tables.where(test);
-      if (OrderService.to.activeOrders.any(
+      if (OrderService.to.orders.any(
         (o) => tablesToDelete.contains(o.table),
       )) {
         return "Es gibt noch aktive Bestellungen unter den zu löschenden Tischen.";
@@ -83,7 +83,7 @@ class TableService extends GetxService {
 
   // Delete an existing group of tables.
   Future<String?> deleteGroup(group) async {
-    if (OrderService.to.activeOrders.any(
+    if (OrderService.to.orders.any(
       (order) => order.table.group == group,
     )) {
       return "Es gibt noch aktive Bestellungen unter den zu löschenden Tischen.";
