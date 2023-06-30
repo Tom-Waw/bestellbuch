@@ -2,21 +2,23 @@ import 'package:flutter/material.dart' hide Table;
 import 'package:get/get.dart';
 
 import '../menu_feature/menu.dart';
-import '../routes.dart';
-import '../tables_feature/table.dart';
-import 'checkout_controller.dart';
 import 'order.dart';
 
-class TransferOrderForm extends StatefulWidget {
+class OrderSelectionView extends StatefulWidget {
   final Order order;
+  final Function(Map<Product, int> selection) onSubmit;
 
-  const TransferOrderForm({super.key, required this.order});
+  const OrderSelectionView({
+    super.key,
+    required this.order,
+    required this.onSubmit,
+  });
 
   @override
-  State<TransferOrderForm> createState() => _TransferOrderFormState();
+  State<OrderSelectionView> createState() => _OrderSelectionViewState();
 }
 
-class _TransferOrderFormState extends State<TransferOrderForm> {
+class _OrderSelectionViewState extends State<OrderSelectionView> {
   final Map<Product, int> _selection = {};
   double get _total => _selection.entries
       .fold(0.0, (sum, entry) => sum + entry.key.price * entry.value);
@@ -55,12 +57,9 @@ class _TransferOrderFormState extends State<TransferOrderForm> {
           ],
         ),
         ElevatedButton(
-          onPressed: () async {
-            dynamic table = await Get.toNamed(Routes.tables);
-            if (table is! Table) return;
-
+          onPressed: () {
+            widget.onSubmit(_selection);
             Get.back();
-            await CheckoutController.to.transferItemsToTable(table, _selection);
           },
           child: const Text(
             "Auswahl umbuchen",

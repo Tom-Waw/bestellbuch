@@ -7,7 +7,7 @@ import 'menu_feature/menu_nav_controller.dart';
 import 'menu_feature/menu_page.dart';
 
 import 'order_feature/checkout_controller.dart';
-import 'order_feature/checkout_page.dart';
+import 'order_feature/order_detail_page.dart';
 
 import 'auth/home_page.dart';
 import 'tables_feature/tables_page.dart';
@@ -50,7 +50,7 @@ final getPages = [
   ),
   GetPage(
     name: Routes.checkout,
-    page: () => const CheckoutPage(),
+    page: () => const OrderDetailPage(),
     binding: BindingsBuilder.put(() => CheckoutController()),
   )
   // GetPage(

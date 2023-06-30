@@ -29,7 +29,7 @@ class Utils {
         title: text,
         titlePadding: const EdgeInsets.all(25.0).copyWith(bottom: 0.0),
         content: const SizedBox.shrink(),
-        contentPadding: const EdgeInsets.all(25.0),
+        contentPadding: const EdgeInsets.only(bottom: 25.0),
         onConfirm: () async {
           await onConfirm();
           Get.back();

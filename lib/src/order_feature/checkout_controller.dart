@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 
 import '../menu_feature/menu.dart';
+import '../routes.dart';
 import '../services/auth_service.dart';
 import '../services/order_service.dart';
 import '../tables_feature/table.dart';
@@ -37,7 +38,7 @@ class CheckoutController extends GetxController {
         _order,
         (order) => order != null
             ? OrderService.to.updateOrder(order)
-            : Get.back(closeOverlays: true),
+            : Get.offAllNamed(Routes.tables),
         condition: () => !_preventUpdate,
       ),
       ever(
@@ -82,7 +83,9 @@ class CheckoutController extends GetxController {
   }
 
   Future<void> transferItemsToTable(
-      Table table, Map<Product, int> items) async {
+    Table table,
+    Map<Product, int> items,
+  ) async {
     if (_order.value == null || table == _order.value!.table || items.isEmpty) {
       return;
     }
@@ -98,10 +101,13 @@ class CheckoutController extends GetxController {
     if (prev.items.isEmpty == true) await OrderService.to.cancelOrder(prev);
   }
 
-  Future<void> checkout() async {
-    if (_order.value == null) return;
+  Future<void> checkout(Map<Product, int> items) async {
+    if (_order.value == null || items.isEmpty) return;
 
-    await OrderService.to.archiveOrder(_order.value!);
-    Get.back();
+    _order.update((val) => val?.payItems(items));
+    if (_order.value!.items.isEmpty == true) {
+      await OrderService.to.cancelOrder(_order.value!);
+      Get.offAllNamed(Routes.tables);
+    }
   }
 }
