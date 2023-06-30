@@ -10,6 +10,7 @@ class Order {
   Table table;
   Employee waiter;
   final Map<Product, int> _items;
+  final Map<Product, int> _payedItems = {};
 
   Order({
     required this.id,
@@ -52,8 +53,12 @@ class Order {
     _items.removeWhere((key, value) => value <= 0);
   }
 
-  void clear() {
-    _items.clear();
+  void payItems(Map<Product, int> items) {
+    items.forEach((key, value) {
+      _items.update(key, (count) => count - value, ifAbsent: () => -1);
+      _payedItems.update(key, (count) => count + value, ifAbsent: () => value);
+    });
+    _items.removeWhere((key, value) => value <= 0);
   }
 
   factory Order.fromJson(String id, Map<String, dynamic> json) => Order(
@@ -83,21 +88,32 @@ class Order {
               "count": entry.value,
             }
         ],
-      };
-
-  Map<String, dynamic> toArchiveJson() => {
-        "table": "${table.group.id}@${table.number}",
-        "waiter": {
-          "id": waiter.id,
-          ...waiter.toJson(),
-        },
-        "items": [
-          for (var entry in _items.entries)
+        "payedItems": [
+          for (var entry in _payedItems.entries)
             {
               "product": entry.key.id,
-              ...entry.key.toJson(),
               "count": entry.value,
             }
         ],
       };
+
+  Map<String, dynamic> toArchiveJson() {
+    if (_items.isNotEmpty) throw Exception("Order is not payed yet");
+
+    return {
+      "table": "${table.group.id}@${table.number}",
+      "waiter": {
+        "id": waiter.id,
+        ...waiter.toJson(),
+      },
+      "items": [
+        for (var entry in _payedItems.entries)
+          {
+            "product": entry.key.id,
+            ...entry.key.toJson(),
+            "count": entry.value,
+          }
+      ],
+    };
+  }
 }
