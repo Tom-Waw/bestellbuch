@@ -14,16 +14,22 @@ class EmployeeListItem extends StatelessWidget {
     return Card(
       child: ListTile(
         contentPadding: const EdgeInsets.all(14.0),
-        trailing: IconButton(
-          onPressed: () => Utils.showBottomSheet(
-            "Mitarbeiter bearbeiten",
-            EmployeeForm(employee: employee),
-          ),
-          icon: const Icon(Icons.edit),
-        ),
         title: Text(
           employee.name,
           style: const TextStyle(fontSize: 18.0),
+        ),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (employee.isActive) const Icon(Icons.table_bar),
+            IconButton(
+              onPressed: () => Utils.showBottomSheet(
+                "Mitarbeiter bearbeiten",
+                EmployeeForm(employee: employee),
+              ),
+              icon: const Icon(Icons.edit),
+            ),
+          ],
         ),
       ),
     );

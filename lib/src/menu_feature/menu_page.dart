@@ -3,10 +3,10 @@ import 'package:get/get.dart';
 
 import '../services/auth_service.dart';
 import '../shared/utils.dart';
-import '../services/menu_service.dart';
 import 'menu_form.dart';
 import 'menu_item_box.dart';
 import 'menu_nav_controller.dart';
+import 'menu_tabbar.dart';
 import 'product_form.dart';
 
 class MenuPage extends StatefulWidget {
@@ -58,11 +58,9 @@ class _MenuPageState extends State<MenuPage> {
                 )
               ]
             ],
-            bottom: TabBar(
-              controller: MenuNavController.to.controller,
-              tabs: MenuService.to.menus
-                  .map((menu) => Tab(text: menu.name))
-                  .toList(),
+            bottom: MenuTabBar(
+              editable: _editMode,
+              exitEditMode: () => setState(() => _editMode = false),
             ),
           ),
           body: Obx(() => MenuNavController.to.current?.items.isEmpty ?? true

@@ -59,7 +59,7 @@ class EmployeeService extends GetxController {
   }
 
   Future<String?> deleteEmployee(Employee employee) async {
-    if (OrderService.to.activeOrders.any((o) => o.waiter == employee)) {
+    if (OrderService.to.orders.any((o) => o.waiter == employee)) {
       return "Mitarbeiter hat noch aktive Bestellungen";
     }
     await _ref.doc(employee.id).delete();

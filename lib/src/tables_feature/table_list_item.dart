@@ -2,6 +2,7 @@ import 'package:bestellbuch/src/routes.dart';
 import 'package:flutter/material.dart' hide Table;
 import 'package:get/get.dart';
 
+import '../order_feature/checkout_controller.dart';
 import 'table.dart';
 
 class TableListItem extends StatelessWidget {
@@ -12,14 +13,21 @@ class TableListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: ListTile(
-        title: Text(table.name),
-        onTap: () => Get.toNamed(
-          Routes.checkout,
-          arguments: table,
-        ),
-      ),
-    );
+    return Obx(() => Card(
+          child: ListTile(
+            title: Text(table.name),
+            onTap: () {
+              if (Get.isRegistered<CheckoutController>()) {
+                return Get.back(result: table);
+              }
+
+              Get.toNamed(
+                Routes.checkout,
+                arguments: table,
+              );
+            },
+            trailing: !table.isAvailable ? const Icon(Icons.restaurant) : null,
+          ),
+        ));
   }
 }

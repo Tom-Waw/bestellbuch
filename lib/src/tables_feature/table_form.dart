@@ -56,17 +56,18 @@ class _TableFormState extends State<TableForm> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  IconButton.filled(
+                  IconButton(
                     padding: const EdgeInsets.all(20.0),
                     onPressed: () => setState(() => _size++),
                     icon: const Icon(Icons.add),
                   ),
                   Expanded(
                     child: Center(
-                        child: Text(
-                      _size.toString(),
-                      style: const TextStyle(fontSize: 24.0),
-                    )),
+                      child: Text(
+                        _size.toString(),
+                        style: const TextStyle(fontSize: 24.0),
+                      ),
+                    ),
                   ),
                   IconButton(
                     padding: const EdgeInsets.all(20.0),
