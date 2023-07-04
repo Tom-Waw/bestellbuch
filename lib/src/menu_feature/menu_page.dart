@@ -4,9 +4,9 @@ import 'package:get/get.dart';
 import '../services/auth_service.dart';
 import '../shared/utils.dart';
 import 'menu_form.dart';
-import 'menu_item_box.dart';
 import 'menu_nav_controller.dart';
 import 'menu_tabbar.dart';
+import 'menu_view.dart';
 import 'product_form.dart';
 
 class MenuPage extends StatefulWidget {
@@ -63,22 +63,10 @@ class _MenuPageState extends State<MenuPage> {
               exitEditMode: () => setState(() => _editMode = false),
             ),
           ),
-          body: Obx(() => MenuNavController.to.current?.items.isEmpty ?? true
-              ? const Center(child: Text("Keine Daten vorhanden"))
-              : GridView.count(
-                  padding: const EdgeInsets.all(8.0),
-                  crossAxisCount: 3,
-                  crossAxisSpacing: 8.0,
-                  mainAxisSpacing: 8.0,
-                  children: MenuNavController.to.current!.items
-                      .map((item) => MenuItemBox(
-                            item: item,
-                            editable: _editMode,
-                            exitEditMode: () =>
-                                setState(() => _editMode = false),
-                          ))
-                      .toList(),
-                )),
+          body: MenuView(
+            editMode: _editMode,
+            exitEditMode: () => setState(() => _editMode = false),
+          ),
         ));
   }
 

@@ -7,8 +7,10 @@ import 'menu_form.dart';
 import 'menu_nav_controller.dart';
 
 class MenuTabBar extends StatelessWidget implements PreferredSizeWidget {
+  final Color? labelColor;
+  final Color? unselectedLabelColor;
   final bool editable;
-  final void Function() exitEditMode;
+  final void Function()? exitEditMode;
 
   @override
   Size get preferredSize =>
@@ -16,8 +18,10 @@ class MenuTabBar extends StatelessWidget implements PreferredSizeWidget {
 
   const MenuTabBar({
     super.key,
+    this.labelColor,
     this.editable = false,
-    required this.exitEditMode,
+    this.exitEditMode,
+    this.unselectedLabelColor,
   });
 
   @override
@@ -26,6 +30,8 @@ class MenuTabBar extends StatelessWidget implements PreferredSizeWidget {
       () => MenuNavController.to.controller.value != null
           ? TabBar(
               controller: MenuNavController.to.controller.value,
+              labelColor: labelColor,
+              unselectedLabelColor: unselectedLabelColor,
               tabs: MenuService.to.menus
                   .map((menu) => Tab(text: menu.name))
                   .toList(),
@@ -42,6 +48,6 @@ class MenuTabBar extends StatelessWidget implements PreferredSizeWidget {
       "Hauptmenü anpassen",
       MenuForm(menu: MenuService.to.menus[index]),
     );
-    return exitEditMode.call();
+    return exitEditMode?.call();
   }
 }

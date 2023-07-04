@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../services/auth_service.dart';
-import '../shared/utils.dart';
 import '../services/table_service.dart';
+import '../shared/utils.dart';
 import 'table.dart';
 import 'table_form.dart';
 import 'table_list_item.dart';
@@ -35,9 +35,9 @@ class TablesPage extends StatelessWidget {
         ),
         body: Obx(
           () => ListView.builder(
-            itemCount: TableService.to.tableGroups.length,
+            itemCount: TableService.to.groups.length,
             itemBuilder: (_, idx) =>
-                _buildGroupTile(TableService.to.tableGroups[idx]),
+                _buildGroupTile(TableService.to.groups[idx]),
           ),
         ));
   }
@@ -60,6 +60,8 @@ class TablesPage extends StatelessWidget {
               : null,
           children: [
             const Divider(thickness: 2.0),
+            if (group.tables.isEmpty)
+              const ListTile(title: Text("Keine Tische vorhanden")),
             ...group.tables.map(
               (table) => TableListItem(
                 table: table,

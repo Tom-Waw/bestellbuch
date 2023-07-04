@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
+import '../services/order_service.dart';
 import '../shared/utils.dart';
 import 'employee.dart';
 import 'employee_form.dart';
@@ -18,19 +20,20 @@ class EmployeeListItem extends StatelessWidget {
           employee.name,
           style: const TextStyle(fontSize: 18.0),
         ),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (employee.isActive) const Icon(Icons.table_bar),
-            IconButton(
-              onPressed: () => Utils.showBottomSheet(
-                "Mitarbeiter bearbeiten",
-                EmployeeForm(employee: employee),
-              ),
-              icon: const Icon(Icons.edit),
-            ),
-          ],
-        ),
+        trailing: Obx(() => Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (OrderService.to.orders.any((o) => o.waiter == employee))
+                  const Icon(Icons.table_bar),
+                IconButton(
+                  onPressed: () => Utils.showBottomSheet(
+                    "Mitarbeiter bearbeiten",
+                    EmployeeForm(group: employee.group, employee: employee),
+                  ),
+                  icon: const Icon(Icons.edit),
+                ),
+              ],
+            )),
       ),
     );
   }

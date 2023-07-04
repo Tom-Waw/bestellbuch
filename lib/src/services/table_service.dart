@@ -10,19 +10,19 @@ class TableService extends GetxService {
 
   static TableService get to => Get.find<TableService>();
 
-  final RxList<TableGroup> tableGroups = <TableGroup>[].obs;
-  List<Table> get allTables => tableGroups.expand((g) => g.tables).toList();
+  final RxList<TableGroup> groups = <TableGroup>[].obs;
+  List<Table> get allTables => groups.expand((g) => g.tables).toList();
 
   @override
   void onInit() {
     super.onInit();
-    tableGroups.bindStream(_dbStream());
+    groups.bindStream(_dbStream());
   }
 
   @override
   void onClose() {
     super.onClose();
-    tableGroups.close();
+    groups.close();
   }
 
   Stream<List<TableGroup>> _dbStream() =>
@@ -32,7 +32,7 @@ class TableService extends GetxService {
 
   String? _checkName(String name, {TableGroup? group}) {
     if (name.isEmpty) return "Bitte geben Sie einen Namen an";
-    if (tableGroups.any((g) => g.name == name && g.id != group?.id)) {
+    if (groups.any((g) => g.name == name && g.id != group?.id)) {
       return "Dieser Name existiert bereits";
     }
     return null;

@@ -47,7 +47,9 @@ class OrderDetailPage extends StatelessWidget {
                 IconButton(
                   icon: const Icon(Icons.add),
                   onPressed: () async {
-                    Product product = await Get.toNamed(Routes.menu);
+                    dynamic product = await Get.toNamed(Routes.menu);
+                    if (product is! Product) return;
+
                     CheckoutController.to.addItem(product);
                   },
                 ),

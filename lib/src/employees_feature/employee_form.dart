@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../services/employee_service.dart';
 import '../shared/add_delete_buttons.dart';
 import '../shared/form_error_message.dart';
-import '../services/employee_service.dart';
 import '../shared/utils.dart';
 import 'employee.dart';
 
 class EmployeeForm extends StatefulWidget {
+  final EmployeeGroup group;
   final Employee? employee;
 
-  const EmployeeForm({super.key, this.employee});
+  const EmployeeForm({super.key, required this.group, this.employee});
 
   @override
   State<EmployeeForm> createState() => _EmployeeFormState();
@@ -88,6 +89,7 @@ class _EmployeeFormState extends State<EmployeeForm> {
       error = await EmployeeService.to.updateEmployee(widget.employee!);
     } else {
       error = await EmployeeService.to.addEmployee(
+        group: widget.group,
         name: _nameController.text,
       );
     }

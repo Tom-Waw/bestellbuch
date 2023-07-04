@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../services/employee_service.dart';
 import '../routes.dart';
-import 'auth_page.dart';
 import '../services/auth_service.dart';
+import '../services/employee_service.dart';
+import 'auth_page.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -14,7 +14,7 @@ class LoginPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text("Authentifizierung")),
       body: Obx(() => ListView.builder(
-            itemCount: 1 + EmployeeService.to.employees.length,
+            itemCount: 1 + EmployeeService.to.allEmployees.length,
             itemBuilder: (_, index) {
               if (index == 0) {
                 return _buildLoginTile(
@@ -24,7 +24,7 @@ class LoginPage extends StatelessWidget {
                 );
               }
 
-              final employee = EmployeeService.to.employees[index - 1];
+              final employee = EmployeeService.to.allEmployees[index - 1];
               return _buildLoginTile(employee.name, () {
                 AuthService.to.loginAsEmployee(employee);
                 Get.offAllNamed(Routes.tables);

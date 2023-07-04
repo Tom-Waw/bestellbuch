@@ -27,8 +27,8 @@ class OrderService extends GetxController {
     void fetchOrders(_) async => orders.value = await _dbStream().last;
 
     _workers.addAll([
-      ever(EmployeeService.to.employees, fetchOrders),
-      ever(TableService.to.tableGroups, fetchOrders),
+      ever(EmployeeService.to.groups, fetchOrders),
+      ever(TableService.to.groups, fetchOrders),
       ever(MenuService.to.menus, fetchOrders),
     ]);
   }

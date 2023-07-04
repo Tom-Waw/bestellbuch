@@ -68,7 +68,7 @@ class Order {
               t.group.id == json["table"].split("@")[0] &&
               t.number == int.parse(json["table"].split("@")[1]),
         ),
-        waiter: EmployeeService.to.employees.firstWhere(
+        waiter: EmployeeService.to.allEmployees.firstWhere(
           (e) => e.id == json["waiter"],
         ),
         items: <Product, int>{

@@ -47,7 +47,7 @@ class AuthService extends GetxService {
   bool get isAdmin => _admin.value != null;
   bool get isLoggedIn => _currentUserId.value != null;
 
-  Employee get currentUser => EmployeeService.to.employees
+  Employee get currentUser => EmployeeService.to.allEmployees
       .firstWhere((e) => e.id == _currentUserId.value);
 
   void loginAsEmployee(Employee employee) {
